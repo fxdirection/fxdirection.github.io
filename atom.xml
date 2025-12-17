@@ -33,13 +33,13 @@
     <category term="技术教程" scheme="https://fxdirection.github.io/categories/%E6%8A%80%E6%9C%AF%E6%95%99%E7%A8%8B/"/>
     
     
-    <category term="开发工具" scheme="https://fxdirection.github.io/tags/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/"/>
-    
     <category term="Git" scheme="https://fxdirection.github.io/tags/Git/"/>
     
     <category term="VS Code" scheme="https://fxdirection.github.io/tags/VS-Code/"/>
     
     <category term="GitHub" scheme="https://fxdirection.github.io/tags/GitHub/"/>
+    
+    <category term="开发工具" scheme="https://fxdirection.github.io/tags/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/"/>
     
   </entry>
   
@@ -85,13 +85,13 @@
     <category term="技术教程" scheme="https://fxdirection.github.io/categories/%E6%8A%80%E6%9C%AF%E6%95%99%E7%A8%8B/"/>
     
     
+    <category term="开发工具" scheme="https://fxdirection.github.io/tags/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/"/>
+    
     <category term="Python" scheme="https://fxdirection.github.io/tags/Python/"/>
     
     <category term="Conda" scheme="https://fxdirection.github.io/tags/Conda/"/>
     
     <category term="虚拟环境" scheme="https://fxdirection.github.io/tags/%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83/"/>
-    
-    <category term="开发工具" scheme="https://fxdirection.github.io/tags/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/"/>
     
   </entry>
   
