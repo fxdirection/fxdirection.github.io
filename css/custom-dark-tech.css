@@ -1,0 +1,301 @@
+/* ========================================
+   Custom Dark Tech Aesthetic - 孤舸博客
+   深色科技感主题增强
+   ======================================== */
+
+/* === CSS 变量覆盖 (Dark Mode) === */
+[data-theme="dark"] {
+  --global-bg: #0a0e17;
+  --card-bg: rgba(15, 23, 42, 0.85);
+  --sidebar-bg: rgba(15, 23, 42, 0.9);
+  --font-color: #e2e8f0;
+  --hr-color: #1e293b;
+  --hljs-bg: #0f172a;
+  --pseudo-hover: #00e5ff;
+  --btn-hover-color: #7c3aed;
+  --btn-bg: #1e293b;
+  --text-bg-hover: rgba(0, 229, 255, 0.1);
+  --tab-button-bg: #1e293b;
+  --tab-botton-color: #94a3b8;
+  --card-border: 1px solid rgba(0, 229, 255, 0.08);
+}
+
+/* === 全局背景 === */
+body {
+  background: linear-gradient(180deg, #0a0e17 0%, #0d1321 40%, #111827 100%) !important;
+  background-attachment: fixed !important;
+}
+
+/* === 导航栏 === */
+#nav {
+  background: rgba(10, 14, 23, 0.92) !important;
+  backdrop-filter: blur(20px) saturate(1.5);
+  border-bottom: 1px solid rgba(0, 229, 255, 0.1);
+}
+
+#nav a {
+  color: #e2e8f0 !important;
+  transition: color 0.3s, text-shadow 0.3s;
+}
+
+#nav a:hover {
+  color: #00e5ff !important;
+  text-shadow: 0 0 8px rgba(0, 229, 255, 0.5);
+}
+
+/* 搜索图标 */
+#search-button {
+  color: #94a3b8 !important;
+}
+
+#search-button:hover {
+  color: #00e5ff !important;
+}
+
+/* === 首页 Hero === */
+#page-header {
+  background: linear-gradient(135deg, #0a0e17 0%, #1a1040 50%, #0d1321 100%) !important;
+  min-height: 70vh;
+}
+
+#page-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(ellipse at 30% 50%, rgba(124, 58, 237, 0.15) 0%, transparent 60%),
+             radial-gradient(ellipse at 70% 30%, rgba(0, 229, 255, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+#page-header #site-title {
+  color: #f8fafc !important;
+  text-shadow: 0 0 30px rgba(0, 229, 255, 0.3), 0 0 60px rgba(124, 58, 237, 0.15);
+  font-weight: 700;
+  letter-spacing: 4px;
+}
+
+#page-header #site-subtitle {
+  color: #94a3b8 !important;
+}
+
+/* 打字机效果光标 */
+#subtitle .typed-cursor {
+  color: #00e5ff !important;
+}
+
+/* === 卡片通用样式 === */
+.card-widget,
+#aside-content .card-widget,
+.recent-post-item,
+#post {
+  background: rgba(15, 23, 42, 0.85) !important;
+  border: 1px solid rgba(0, 229, 255, 0.06) !important;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.recent-post-item:hover {
+  border-color: rgba(0, 229, 255, 0.2) !important;
+  box-shadow: 0 8px 32px rgba(0, 229, 255, 0.08), 0 0 0 1px rgba(0, 229, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+/* === 文章卡片封面 === */
+.recent-post-item .post_cover img {
+  transition: transform 0.5s ease, filter 0.3s ease;
+}
+
+.recent-post-item:hover .post_cover img {
+  transform: scale(1.05);
+  filter: brightness(1.1);
+}
+
+/* === 侧边栏 === */
+#aside-content .card-widget {
+  border: 1px solid rgba(0, 229, 255, 0.06) !important;
+}
+
+#aside-content .card-info .author-info__name {
+  color: #f8fafc !important;
+}
+
+#aside-content .card-info .author-info__description {
+  color: #94a3b8 !important;
+  font-style: italic;
+}
+
+/* 头像光晕 */
+#aside-content .card-info .card-info-avatar .avatar-img {
+  box-shadow: 0 0 20px rgba(0, 229, 255, 0.2), 0 0 40px rgba(124, 58, 237, 0.1);
+  border: 2px solid rgba(0, 229, 255, 0.2);
+}
+
+/* 标签云 */
+#aside-content .card-tag-cloud a {
+  transition: all 0.3s ease;
+}
+
+#aside-content .card-tag-cloud a:hover {
+  color: #00e5ff !important;
+  text-shadow: 0 0 8px rgba(0, 229, 255, 0.4);
+}
+
+/* === 链接样式 === */
+a:not(.btn):not(.site-page):not(.tag):not([class*='social']) {
+  color: #38bdf8;
+  transition: color 0.3s, text-shadow 0.3s;
+}
+
+a:not(.btn):not(.site-page):not(.tag):not([class*='social']):hover {
+  color: #00e5ff;
+  text-shadow: 0 0 8px rgba(0, 229, 255, 0.3);
+}
+
+/* === 代码块 === */
+figure.highlight,
+pre {
+  background: #0f172a !important;
+  border: 1px solid rgba(0, 229, 255, 0.08) !important;
+  border-radius: 8px;
+}
+
+code {
+  color: #00e5ff;
+  background: rgba(0, 229, 255, 0.08);
+  border-radius: 4px;
+  padding: 2px 6px;
+}
+
+/* === 滚动条 === */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0a0e17;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #00e5ff 0%, #7c3aed 100%);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #38bdf8 0%, #8b5cf6 100%);
+}
+
+/* === 页脚 === */
+#footer {
+  background: rgba(10, 14, 23, 0.95) !important;
+  border-top: 1px solid rgba(0, 229, 255, 0.08);
+}
+
+/* === TOC 目录 === */
+.toc-link.active {
+  color: #00e5ff !important;
+}
+
+.toc-link:hover {
+  color: #38bdf8 !important;
+}
+
+/* === 分页器 === */
+#pagination .page-number.current {
+  background: linear-gradient(135deg, #00e5ff 0%, #7c3aed 100%) !important;
+  color: #fff !important;
+  border: none !important;
+}
+
+#pagination .page-number {
+  color: #94a3b8 !important;
+  border: 1px solid rgba(0, 229, 255, 0.15) !important;
+  transition: all 0.3s ease;
+}
+
+#pagination .page-number:hover {
+  border-color: #00e5ff !important;
+  color: #00e5ff !important;
+}
+
+/* === 右侧按钮组 === */
+#rightside > div > button,
+#rightside > div > a {
+  background: rgba(15, 23, 42, 0.9) !important;
+  border: 1px solid rgba(0, 229, 255, 0.1) !important;
+  color: #94a3b8 !important;
+  transition: all 0.3s ease;
+}
+
+#rightside > div > button:hover,
+#rightside > div > a:hover {
+  border-color: #00e5ff !important;
+  color: #00e5ff !important;
+  box-shadow: 0 0 12px rgba(0, 229, 255, 0.2);
+}
+
+/* === 引用块 === */
+blockquote {
+  background: rgba(124, 58, 237, 0.06) !important;
+  border-left: 4px solid #7c3aed !important;
+  color: #cbd5e1;
+}
+
+/* === 选中文本 === */
+::selection {
+  background: rgba(124, 58, 237, 0.4);
+  color: #f8fafc;
+}
+
+/* === 搜索弹窗 === */
+.search-dialog {
+  background: rgba(15, 23, 42, 0.95) !important;
+  border: 1px solid rgba(0, 229, 255, 0.1) !important;
+  backdrop-filter: blur(20px);
+}
+
+.search-dialog input {
+  background: rgba(30, 41, 59, 0.8) !important;
+  border: 1px solid rgba(0, 229, 255, 0.15) !important;
+  color: #e2e8f0 !important;
+}
+
+.search-dialog input:focus {
+  border-color: #00e5ff !important;
+  box-shadow: 0 0 12px rgba(0, 229, 255, 0.15);
+}
+
+/* === 美化: 文章标题前缀图标 === */
+.beautify h2::before {
+  color: #00e5ff !important;
+}
+
+/* === 加载动画叠加层 === */
+#loading-box {
+  background: #0a0e17 !important;
+}
+
+/* === 移动端侧边栏 === */
+#sidebar_mobile_data {
+  background: rgba(10, 14, 23, 0.98) !important;
+}
+
+/* === 文章版权信息 === */
+.post-copyright {
+  background: rgba(15, 23, 42, 0.6) !important;
+  border-left: 4px solid #00e5ff !important;
+}
+
+/* === 相关推荐 === */
+.relatedPosts .relatedPosts-list > .relatedPosts-item {
+  border: 1px solid rgba(0, 229, 255, 0.06);
+  transition: all 0.3s ease;
+}
+
+.relatedPosts .relatedPosts-list > .relatedPosts-item:hover {
+  border-color: rgba(0, 229, 255, 0.2);
+  transform: translateY(-2px);
+}
