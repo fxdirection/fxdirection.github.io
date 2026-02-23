@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>对称性与角色分工 — MARL通信笔记</title>
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<div id="progress-bar"></div>
+<button id="sidebar-toggle">☰</button>
+<aside id="sidebar">
+  <div class="sidebar-header">
+    <a href="../index.html">📘 MARL 通信笔记</a>
+    <input type="text" id="search-box" placeholder="搜索关键词…">
+  </div>
+  <nav>
+    <ul>
+      <li><span class="nav-section-title">概览</span></li>
+      <li><a href="../index.html">首页 · 论文定位</a></li>
+      <li><span class="nav-section-title">基础篇</span></li>
+      <li><a href="nonstationarity.html">非平稳性与MARL基础</a></li>
+      <li><a href="ctde.html">CTDE范式</a></li>
+      <li><span class="nav-section-title">通信篇</span></li>
+      <li><a href="communication.html">通信的三层作用</a></li>
+      <li><a href="bandwidth.html">代理通信与带宽限制</a></li>
+      <li><span class="nav-section-title">协作篇</span></li>
+      <li><a href="symmetry.html" class="active">对称性与角色分工</a></li>
+      <li><span class="nav-section-title">总结</span></li>
+      <li><a href="takeaways.html">终极总结</a></li>
+    </ul>
+  </nav>
+</aside>
+<main id="main">
+  <h1>对称性与角色分工</h1>
+  <p class="page-subtitle">当多个代理完全相同时（拥有相同的神经网络结构和训练过程），它们会面临“对称性问题”：所有人都做出相同的决策。本页将解释为什么打破对称性对协作至关重要，以及通信如何实现稳定且动态的角色分配。</p>
+
+  <details class="concept-block" open>
+    <summary>概念 1：对称性问题 (The Symmetry Problem)</summary>
+    <div class="block-content">
+      <p>在多智能体强化学习中，为了提高训练效率，通常会让所有代理共享同一套网络参数。当代理拥有相同的架构、参数和观测空间时，它们往往会学习到完全一致的<span class="term-tooltip">策略<span class="tooltip-text">代理根据当前状态决定动作的逻辑</span></span>。</p>
+      <p>对于需要分工协作的任务，这种<span class="term-tooltip">对称性<span class="tooltip-text">Symmetry: 代理之间在功能和决策上不可区分的状态</span></span>是致命的。例如，两个代理可能同时冲向同一个目标，或者同时选择防守同一个点。从算法的角度看，没有任何机制能区分代理 A 和代理 B，导致它们陷入决策死锁。</p>
+      
+      <div class="analogy-box">
+        <strong>生活类比：礼貌死锁</strong>
+        <p>两个陌生人同时来到一扇狭窄的门前。因为两人都非常有礼貌（策略相同），当一个人侧身让路时，另一个人也侧身让路；当一个人试探性迈步时，另一个人也同时迈步。结果两人在门口反复横跳，谁也过不去。</p>
+      </div>
+
+      <div class="example-box">
+        <strong>双代理示例：觅食任务</strong>
+        <p>两个完全相同的代理在地图上寻找食物。地图上有位置 A 和位置 B 两个食物点。如果两个代理距离 A 的距离完全相等，且它们都学到了“前往最近食物点”的策略，那么它们会同时冲向 A。这导致 A 处发生拥挤冲突，而 B 处的食物被完全浪费。</p>
+      </div>
+    </div>
+  </details>
+
+  <div class="svg-container">
+    <svg viewBox="0 0 800 300" xmlns="http://www.w3.org/2000/svg">
+      <!-- Background -->
+      <rect x="0" y="0" width="800" height="300" fill="#f8f9fa" rx="10"/>
+      
+      <!-- Left Panel: Symmetric Conflict -->
+      <text x="200" y="30" text-anchor="middle" font-weight="bold" fill="#333">对称冲突 (Symmetric Conflict)</text>
+      <circle cx="100" cy="200" r="20" fill="#4a90e2" />
+      <text x="100" y="235" text-anchor="middle" font-size="12">代理 A</text>
+      <circle cx="300" cy="200" r="20" fill="#4a90e2" />
+      <text x="300" y="235" text-anchor="middle" font-size="12">代理 B</text>
+      
+      <rect x="180" y="80" width="40" height="40" fill="#e74c3c" rx="5" />
+      <text x="200" y="135" text-anchor="middle" font-size="12">唯一目标</text>
+      
+      <path d="M120 180 L180 110" stroke="#e74c3c" stroke-width="2" stroke-dasharray="5,5" marker-end="url(#arrowhead)"/>
+      <path d="M280 180 L220 110" stroke="#e74c3c" stroke-width="2" stroke-dasharray="5,5" marker-end="url(#arrowhead)"/>
+      <text x="200" y="270" text-anchor="middle" fill="#e74c3c" font-size="14">决策完全一致：发生冲突</text>
+
+      <!-- Divider -->
+      <line x1="400" y1="50" x2="400" y2="250" stroke="#ccc" stroke-width="1" />
+
+      <!-- Right Panel: Negotiated Cooperation -->
+      <text x="600" y="30" text-anchor="middle" font-weight="bold" fill="#333">通信打破对称 (Negotiated)</text>
+      <circle cx="500" cy="200" r="20" fill="#4a90e2" />
+      <text x="500" y="235" text-anchor="middle" font-size="12">代理 A</text>
+      <circle cx="700" cy="200" r="20" fill="#4a90e2" />
+      <text x="700" y="235" text-anchor="middle" font-size="12">代理 B</text>
+      
+      <rect x="530" y="80" width="30" height="30" fill="#2ecc71" rx="5" />
+      <rect x="640" y="80" width="30" height="30" fill="#2ecc71" rx="5" />
+      
+      <!-- Message Bubble -->
+      <path d="M520 170 Q550 140 600 150" fill="none" stroke="#f39c12" stroke-width="2" />
+      <text x="600" y="140" text-anchor="middle" font-size="10" fill="#f39c12">"我去左边"</text>
+
+      <path d="M510 170 L540 120" stroke="#2ecc71" stroke-width="2" marker-end="url(#arrowhead)"/>
+      <path d="M690 170 L660 120" stroke="#2ecc71" stroke-width="2" marker-end="url(#arrowhead)"/>
+      <text x="600" y="270" text-anchor="middle" fill="#2ecc71" font-size="14">协商分工：高效协作</text>
+
+      <!-- Arrow Definition -->
+      <defs>
+        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+          <polygon points="0 0, 10 3.5, 0 7" />
+        </marker>
+      </defs>
+    </svg>
+  </div>
+
+  <details class="concept-block" open>
+    <summary>概念 2：打破对称的方法 (Methods to Break Symmetry)</summary>
+    <div class="block-content">
+      <p>为了让代理各司其职，必须引入某种机制来打破这种“一致性”。常见的非通信方法包括：</p>
+      <ul>
+        <li><strong>静态分工 (Static Assignment)：</strong> 预先定义好每个代理的角色（如：1 号代理负责攻击，2 号负责防守）。虽然简单，但完全无法适应环境变化。</li>
+        <li><strong>随机扰动 (Random Perturbation)：</strong> 在初始化或动作中加入随机噪声。这能偶尔打破对称，但非常不稳定，学到的分工往往在训练中途崩塌。</li>
+        <li><strong>基于规则的分配：</strong> 硬编码逻辑（如：ID 小的代理往左走）。这种方法不具备泛化能力，无法处理复杂的动态场景。</li>
+      </ul>
+      <p>这些方法的局限在于：它们要么无法<strong>自适应 (Adapt)</strong>，要么无法在训练中<strong>稳定 (Stabilize)</strong>。<span class="term-tooltip">归纳偏置<span class="tooltip-text">Inductive Bias: 算法中为了让学习更有效而引入的先验假设</span></span>如果太强，会限制代理的潜力；如果太弱，对称性又难以打破。</p>
+
+      <div class="analogy-box">
+        <strong>生活类比：餐馆订座</strong>
+        <p>静态分工就像强制给每位客人分配固定座位，不管客人多寡或需求。随机扰动就像让客人随便坐，可能导致一桌挤满人，另一桌空着。我们真正需要的是一名领班（动态机制），根据当下的客流量灵活引导座位。</p>
+      </div>
+
+      <div class="example-box">
+        <strong>双代理示例：工厂机器人</strong>
+        <p>两个机器人在流水线上。有时左侧工位需要两人，有时右侧需要。静态分工会让其中一人永远等在没活的工位；随机扰动则会让两人经常跑向同一个工位，造成混乱。</p>
+      </div>
+    </div>
+  </details>
+
+  <details class="concept-block" open>
+    <summary>概念 3：通信实现动态角色协商 (Communication Enables Dynamic Role Negotiation)</summary>
+    <div class="block-content">
+      <p>通过通信，代理可以显式地进行<span class="term-tooltip">角色分配<span class="tooltip-text">Role Assignment: 在多智能体系统中将特定职责赋予特定代理的过程</span></span>。这种<span class="term-tooltip">协商<span class="tooltip-text">Negotiation: 代理通过交换信息达成共识的过程</span></span>本身就是一个可以学习的协议：代理学会何时声明自己占据某个角色，以及何时退让。</p>
+      <p>这比单纯通过观察队友行为来推断角色的<span class="term-tooltip">隐式协调<span class="tooltip-text">Implicit Coordination: 不通过通信，仅靠观测对方动作来猜测意图</span></span>要快得多且更可靠。通信提供了一种“可信承诺”机制：一旦代理广播“我负责左侧”，其他代理的奖励函数逻辑会随之改变，从而自动寻找剩余的最优方案。</p>
+
+      <div class="analogy-box">
+        <strong>生活类比：路人篮球赛</strong>
+        <p>在没有沟通的情况下，球员只能靠眼神交流，经常出现两人同时跳起来抢同一个篮板球的情况。有了沟通，一个人喊出“我的！”（I got it!），其他人会立刻放弃起跳，转而寻找传球位置或防守位置。</p>
+      </div>
+
+      <div class="example-box">
+        <strong>双代理示例：搜索无人机</strong>
+        <p>两台无人机在森林中搜救。通过通信，它们可以在一轮交流内达成共识：“我搜北区”，“收到，那我搜南区”。如果仅仅靠观测对方位置（隐式协调），可能需要多个回合的试探，甚至在森林遮挡视线时完全无法分工。</p>
+      </div>
+    </div>
+  </details>
+
+  <div class="key-insight">
+    对称性打破不是一次性事件，而是需要在每个时间步动态维持的。通信让“谁做什么”变成一个可学习的协商过程，而不是靠运气或硬编码。
+  </div>
+
+  <section class="quiz-section">
+    <h3>🧪 自测：你真的理解了吗？</h3>
+    <div class="quiz-item">
+      <div class="quiz-q">Q1: 为什么在 MARL 中，“参数共享”会加剧对称性问题？</div>
+      <button class="quiz-toggle-btn">查看答案</button>
+      <div class="quiz-a">因为它让代理具有相同的策略函数，在相同输入下产生相同输出。这意味着如果两个智能体看到类似的场景，它们会做出完全一样的决定，导致无法分工。</div>
+    </div>
+    <div class="quiz-item">
+      <div class="quiz-q">Q2: 与静态角色分配相比，通过通信进行“协商”的核心优势是什么？</div>
+      <button class="quiz-toggle-btn">查看答案</button>
+      <div class="quiz-a">能够根据环境状态动态调整分工，具有更好的灵活性。静态分配无法应对环境变化，而通信协商让智能体能实时调整角色。</div>
+    </div>
+    <div class="quiz-item">
+      <div class="quiz-q">Q3: 隐式协调（Implicit Coordination）的主要缺点是？</div>
+      <button class="quiz-toggle-btn">查看答案</button>
+      <div class="quiz-a">在复杂或遮挡环境下达成共识的速度慢，且不稳定性高。当智能体无法直接观察彼此时，隐式协调几乎无法工作。</div>
+    </div>
+  </section>
+  <div class="page-nav">
+    <a class="prev" href="bandwidth.html">← 代理通信与带宽限制</a>
+    <a class="next" href="takeaways.html">终极总结 →</a>
+  </div>
+</main>
+<script src="../app.js"></script>
+</body>
+</html>

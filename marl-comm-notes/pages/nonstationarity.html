@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>非平稳性与MARL基础 — MARL通信笔记</title>
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<div id="progress-bar"></div>
+<button id="sidebar-toggle">☰</button>
+<aside id="sidebar">
+  <div class="sidebar-header">
+    <a href="../index.html">📘 MARL 通信笔记</a>
+    <input type="text" id="search-box" placeholder="搜索关键词…">
+  </div>
+  <nav>
+    <ul>
+      <li><span class="nav-section-title">概览</span></li>
+      <li><a href="../index.html">首页 · 论文定位</a></li>
+      <li><span class="nav-section-title">基础篇</span></li>
+      <li><a href="nonstationarity.html" class="active">非平稳性与MARL基础</a></li>
+      <li><a href="ctde.html">CTDE范式</a></li>
+      <li><span class="nav-section-title">通信篇</span></li>
+      <li><a href="communication.html">通信的三层作用</a></li>
+      <li><a href="bandwidth.html">代理通信与带宽限制</a></li>
+      <li><span class="nav-section-title">协作篇</span></li>
+      <li><a href="symmetry.html">对称性与角色分工</a></li>
+      <li><span class="nav-section-title">总结</span></li>
+      <li><a href="takeaways.html">终极总结</a></li>
+    </ul>
+  </nav>
+</aside>
+<main id="main">
+  <h1>非平稳性与MARL基础</h1>
+  <p class="page-subtitle">多智能体强化学习的核心挑战不在于单一代理的复杂度，而在于代理之间动态交互产生的非平稳性。理解这一本质是掌握通信、协作与 CTDE 范式的必经之路。</p>
+
+  <details class="concept-block" open>
+    <summary>多智能体强化学习 (MARL)</summary>
+    <div class="block-content">
+      <p><span class="term-tooltip">MARL<span class="tooltip-text">Multi-Agent Reinforcement Learning，多个学习主体在共享环境中通过奖励机制进行演化的技术框架</span></span> 是由多个独立的智能体在同一个共享环境中同时学习。这不仅仅是“多个单体强化学习”的简单堆叠，因为代理之间的行为相互耦合。每个代理的目标是最大化自己的累积回报，但在达成目标的过程中，它必须应对其他代理带来的不确定性。</p>
+      
+      <div class="analogy-box">
+        <strong>生活类比：</strong> 就像一场多人厨艺挑战赛，你不仅要管好自己的灶台火候，还要随时防备队友突然伸过来的铲子，或者由于队友提前用光了食盐而不得不临时调整你的菜谱。
+      </div>
+      
+      <div class="example-box">
+        <strong>双智能体案例：</strong> 两个机器人 A 和 B 在仓库中搬运重物。A 向左走会影响重心的平衡，迫使 B 必须做出相应的姿态补偿。如果 A 改变了搬运节奏，B 之前学到的所有平衡动作可能都会瞬间失效。
+      </div>
+    </div>
+  </details>
+
+  <details class="concept-block" open>
+    <summary>部分可观测 (Partial Observability)</summary>
+    <div class="block-content">
+      <p>在现实的分布式系统中，每个代理通常只能获得<span class="term-tooltip">部分可观测 (Partial Observability)<span class="tooltip-text">个体由于感知范围或传感器限制，只能获取全局状态的一个子集</span></span>信息。这意味着决策必须基于不完整的上下文，代理往往不知道全局状态，甚至不知道队友的具体动作和意图。</p>
+      
+      <div class="analogy-box">
+        <strong>生活类比：</strong> 想象你在迷雾森林中玩捉迷藏，你只能看清周围五米的景物。虽然你听到了远处的树枝断裂声，但你无法确定那是队友在包抄还是敌人在埋伏。
+      </div>
+      
+      <div class="example-box">
+        <strong>场景应用：</strong> 无人驾驶车队中，当前车因为前方遮挡物突然刹车时，后方车辆无法直接观察到最前方的障碍。如果不通过通信告知，后车只能通过前车的刹车灯这一局部观测来猜测意图。
+      </div>
+    </div>
+  </details>
+
+  <details class="concept-block" open>
+    <summary>非平稳性 (Non-stationarity)</summary>
+    <div class="block-content">
+      <p><span class="term-tooltip">非平稳 (Non-stationarity)<span class="tooltip-text">由于环境中其他学习者策略不断演进，导致个体观测到的环境转换概率和奖励分布随时间发生漂移</span></span> 是 MARL 训练中最棘手的问题。在单智能体 RL 中，环境是静止的（Stationary）；但在多智能体中，当 Agent A 在学习时，它的行为模式（<span class="term-tooltip">策略 Policy<span class="tooltip-text">从观测状态到执行动作的映射规则</span></span>）在变。对于 Agent B 而言，这种变化导致即便它执行同样的动作，获得的<span class="term-tooltip">回报 (Reward)<span class="tooltip-text">环境反馈给个体的数值化评价指标</span></span>也会随时间漂移。</p>
+
+      <div class="svg-container">
+        <svg width="400" height="200" viewBox="0 0 400 200">
+          <circle cx="80" cy="100" r="40" fill="#e0f2f1" stroke="#00897b" stroke-width="2" />
+          <text x="80" y="105" text-anchor="middle" font-size="14" font-weight="bold">Agent A</text>
+          
+          <circle cx="320" cy="100" r="40" fill="#e1f5fe" stroke="#0288d1" stroke-width="2" />
+          <text x="320" y="105" text-anchor="middle" font-size="14" font-weight="bold">Agent B</text>
+          
+          <path d="M 120 80 Q 200 40 280 80" fill="none" stroke="#666" stroke-width="2" marker-end="url(#arrowhead)" />
+          <text x="200" y="50" text-anchor="middle" font-size="12">策略更新 (πA)</text>
+          <text x="200" y="65" text-anchor="middle" font-size="10" fill="#d32f2f">改变 B 的状态转换概率 P'</text>
+
+          <path d="M 280 120 Q 200 160 120 120" fill="none" stroke="#666" stroke-width="2" marker-end="url(#arrowhead)" />
+          <text x="200" y="155" text-anchor="middle" font-size="12">策略演化 (πB)</text>
+          <text x="200" y="170" text-anchor="middle" font-size="10" fill="#d32f2f">导致 A 的奖励分布 R' 漂移</text>
+
+          <defs>
+            <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+              <polygon points="0 0, 10 3.5, 0 7" fill="#666" />
+            </marker>
+          </defs>
+        </svg>
+      </div>
+
+      <div class="analogy-box">
+        <strong>生活类比：</strong> 就像在流沙之上盖房子。你正在努力加固地基，但沙子本身在不断流动。你刚才觉得“牢固”的砖块，一秒钟后就掉进了空隙里。
+      </div>
+      
+      <div class="example-box">
+        <strong>动态演化：</strong> 在足球机器人训练中，前锋 A 学会了从左路突破。防守者 B 察觉后开始重点盯防左路。此时 A 原本高效的“左路突破”动作回报骤减。A 必须抛弃旧策略，转而学习右路突破。这种循环往复的策略漂移让网络极难收敛。
+      </div>
+
+      <p class="key-insight">
+        <strong>核心结论：</strong> 非平稳性是 MARL 一切算法设计的起点。无论是引入中心化评价（Centralized Critic），还是通过显式通信共享观测，其本质都是为了在变动的环境中寻找一份“确定的参考系”。
+      </p>
+    </div>
+  </details>
+
+  <div class="quiz-section">
+    <h3>🧪 自测：你真的理解了吗？</h3>
+    <div class="quiz-item">
+      <div class="quiz-q">Q1: 为什么传统的单智能体算法（如基础 Q-Learning）直接用于 MARL 往往会失效？</div>
+      <button class="quiz-toggle-btn">查看答案</button>
+      <div class="quiz-a">因为环境变得“非平稳”。单智能体算法假设环境的转换概率和奖励分布是静态的（Stationary），但在 MARL 中，其他代理也在学习，这相当于环境的地基在不断晃动。算法无法区分奖励的下降是因为“自己做错了”还是“队友变了”。</div>
+    </div>
+    <div class="quiz-item">
+      <div class="quiz-q">Q2: “部分可观测”给代理间的协作带来了什么具体困难？</div>
+      <button class="quiz-toggle-btn">查看答案</button>
+      <div class="quiz-a">缺乏全局视野意味着代理无法确定队友的行为是因为“观测到了我没看到的威胁”还是单纯的“随机探索”，这导致难以达成共识，容易出现动作冲突（如两人抢同一颗球）。</div>
+    </div>
+    <div class="quiz-item">
+      <div class="quiz-q">Q3: 非平稳性与本笔记重点讨论的“通信”有什么逻辑关联？</div>
+      <button class="quiz-toggle-btn">查看答案</button>
+      <div class="quiz-a">通信是缓解非平稳性的直接手段。通过共享观测或意图，代理可以将原本“不可见的环境变量”（即队友的意图）转化为“可见的观测输入”，从而让非平稳的环境在特定视角下变得相对稳定。</div>
+    </div>
+  </div>
+
+  <div class="page-nav">
+    <a class="prev" href="../index.html">首页</a>
+    <a class="next" href="ctde.html">CTDE范式</a>
+  </div>
+</main>
+<script src="../app.js"></script>
+</body>
+</html>

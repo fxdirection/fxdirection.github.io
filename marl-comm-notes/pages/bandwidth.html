@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>代理通信与带宽限制 — MARL通信笔记</title>
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<div id="progress-bar"></div>
+<button id="sidebar-toggle">☰</button>
+<aside id="sidebar">
+  <div class="sidebar-header">
+    <a href="../index.html">📘 MARL 通信笔记</a>
+    <input type="text" id="search-box" placeholder="搜索关键词…">
+  </div>
+  <nav>
+    <ul>
+      <li><span class="nav-section-title">概览</span></li>
+      <li><a href="../index.html">首页 · 论文定位</a></li>
+      <li><span class="nav-section-title">基础篇</span></li>
+      <li><a href="nonstationarity.html">非平稳性与MARL基础</a></li>
+      <li><a href="ctde.html">CTDE范式</a></li>
+      <li><span class="nav-section-title">通信篇</span></li>
+      <li><a href="communication.html">通信的三层作用</a></li>
+      <li><a href="bandwidth.html" class="active">代理通信与带宽限制</a></li>
+      <li><span class="nav-section-title">协作篇</span></li>
+      <li><a href="symmetry.html">对称性与角色分工</a></li>
+      <li><span class="nav-section-title">总结</span></li>
+      <li><a href="takeaways.html">终极总结</a></li>
+    </ul>
+  </nav>
+</aside>
+<main id="main">
+  <h1>代理通信与带宽限制</h1>
+  <p class="page-subtitle">
+    本页涵盖了两个相互关联的主题：谁与谁说话的拓扑结构（代理通信与 P2P 通信）以及能说多少话的物理约束（带宽限制）。
+    这两者共同决定了多智能体通信在实际应用中的上限与复杂度。
+  </p>
+
+  <!-- Section E: Proxy vs Peer-to-Peer -->
+  <section>
+    <details class="concept-block" open>
+      <summary>拓扑结构：P2P 与 代理中转 (Proxy Hub)</summary>
+      <div class="block-content">
+        <p>
+          在多智能体系统中，通信的路径决定了信息的流动效率。
+          <span class="term-tooltip">P2P<span class="tooltip-text">Peer-to-Peer，点对点通信，每个节点直接与其他节点连接。</span></span> 
+          模式下，每个智能体直接向其他所有人发消息。虽然结构简单，但随着智能体数量 $n$ 的增加，消息总量呈平方级 $O(n^2)$ 增长。
+        </p>
+        <p>
+          为了解决扩展性问题，<span class="term-tooltip">代理(Proxy)<span class="tooltip-text">在通信中充当中转或聚合角色的中心节点。</span></span> 
+          中转模式应运而生。它引入一个中心节点负责收集所有人的消息，生成一份全局摘要（Summary）后再广播给所有人。这种方式将消息数量降至线性级 $O(n)$。
+        </p>
+
+        <div class="svg-container">
+          <svg viewBox="0 0 600 240" xmlns="http://www.w3.org/2000/svg">
+            <!-- P2P Side -->
+            <text x="70" y="30" font-size="14" font-weight="bold">P2P (点对点)</text>
+            <circle cx="50" cy="80" r="10" fill="#3498db" />
+            <circle cx="150" cy="80" r="10" fill="#3498db" />
+            <circle cx="50" cy="180" r="10" fill="#3498db" />
+            <circle cx="150" cy="180" r="10" fill="#3498db" />
+            <line x1="50" y1="80" x2="150" y2="80" stroke="#999" stroke-width="1" />
+            <line x1="50" y1="80" x2="50" y2="180" stroke="#999" stroke-width="1" />
+            <line x1="50" y1="80" x2="150" y2="180" stroke="#999" stroke-width="1" />
+            <line x1="150" y1="80" x2="50" y2="180" stroke="#999" stroke-width="1" />
+            <line x1="150" y1="80" x2="150" y2="180" stroke="#999" stroke-width="1" />
+            <line x1="50" y1="180" x2="150" y2="180" stroke="#999" stroke-width="1" />
+            <text x="60" y="210" font-size="12" fill="#666">消息量: O(n²)</text>
+
+            <!-- Proxy Side -->
+            <text x="420" y="30" font-size="14" font-weight="bold">Proxy (代理中心)</text>
+            <circle cx="450" cy="130" r="15" fill="#e74c3c" /> <!-- Hub -->
+            <circle cx="380" cy="80" r="10" fill="#3498db" />
+            <circle cx="520" cy="80" r="10" fill="#3498db" />
+            <circle cx="380" cy="180" r="10" fill="#3498db" />
+            <circle cx="520" cy="180" r="10" fill="#3498db" />
+            <line x1="450" y1="130" x2="380" y2="80" stroke="#e74c3c" stroke-width="2" />
+            <line x1="450" y1="130" x2="520" y2="80" stroke="#e74c3c" stroke-width="2" />
+            <line x1="450" y1="130" x2="380" y2="180" stroke="#e74c3c" stroke-width="2" />
+            <line x1="450" y1="130" x2="520" y2="180" stroke="#e74c3c" stroke-width="2" />
+            <text x="410" y="210" font-size="12" fill="#666">消息量: O(n)</text>
+          </svg>
+          <p class="caption">图 4.1: P2P 全连接拓扑与代理中转拓扑的对比</p>
+        </div>
+
+        <div class="analogy-box">
+          <strong>生活比喻：</strong> 
+          P2P 就像是一个没有主持人的 50 人微信群，每个人都在疯狂 @ 所有人，信息流瞬间爆炸（乱成一锅粥）。
+          代理模式就像是一家公司的部门晨会，大家先向主管汇报进度，主管最后总结几条核心要点告知全员（高效有序）。
+        </div>
+
+        <div class="example-box">
+          <strong>双智能体/多智能体示例：</strong> 
+          想象 5 台物流无人机。
+          <ul>
+            <li><strong>P2P 模式：</strong> 每台无人机必须告诉其他 4 台自己的位置和速度，总共产生 20 条消息。</li>
+            <li><strong>代理模式：</strong> 5 台无人机各向地面基站发 1 条位置消息，基站通过计算，广播 1 条汇总指令给所有人，总共仅 10 条消息（5 上行 + 5 下行）。</li>
+          </ul>
+        </div>
+
+        <p>
+          <strong>代理的潜在风险：</strong> 
+          代理节点构成了系统的“单点故障”（Single Point of Failure）。如果代理节点损坏或信号中断，整个团队的信息交换可能完全瘫痪。
+          协作系统是否会因此崩溃，取决于算法是否设计了退化机制：在没有代理消息时，智能体能否仅凭观察进行基础动作？
+        </p>
+      </div>
+    </details>
+  </section>
+
+  <!-- Section F: Bandwidth Constraints -->
+  <section>
+    <details class="concept-block" open>
+      <summary>带宽限制：Bit 与 Token 的区别</summary>
+      <div class="block-content">
+        <p>
+          <span class="term-tooltip">带宽(Bandwidth)<span class="tooltip-text">通信信道在单位时间内能传输的最大数据量。</span></span> 
+          限制是 MARL 面临的最普遍约束。由于物理环境限制或功耗要求，智能体不能无限制地发送高维向量，必须对信息进行压缩。
+        </p>
+        <p>在理解带宽时，必须区分三个容易混淆的概念：</p>
+        <ul>
+          <li><strong>Bit (比特)：</strong> 通信理论的最底层单位（0 或 1）。低带宽意味着每条消息只能包含极少的 Bit。</li>
+          <li><strong>Token (自然语言处理)：</strong> 在 LLM 中指代单词或子词的切片。</li>
+          <li><strong>Token (<span class="term-tooltip">离散符号<span class="tooltip-text">MARL 通信中从预定义词典中选择的非连续整数标识符。</span></span>)：</strong> 在 MARL 通信中，指代从有限词典中挑选出的离散标识符。这是一种极端的压缩，例如词典大小为 4，那么发一个 Token 只需要 2 个 Bit。</li>
+        </ul>
+
+        <div class="svg-container">
+          <svg viewBox="0 0 600 160" xmlns="http://www.w3.org/2000/svg">
+            <rect x="20" y="40" width="120" height="80" rx="5" fill="#ecf0f1" stroke="#333" />
+            <text x="35" y="85" font-size="12">原始高维状态</text>
+            <text x="35" y="105" font-size="10" fill="#7f8c8d">(如 128维向量)</text>
+            
+            <path d="M140 80 Q 250 80 250 80" stroke="#333" fill="none" marker-end="url(#arrowhead)" />
+            <defs>
+              <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+                <polygon points="0 0, 10 3.5, 0 7" />
+              </marker>
+            </defs>
+
+            <!-- Bottleneck -->
+            <path d="M250 50 L 250 110 L 320 90 L 320 70 Z" fill="#e67e22" opacity="0.8" />
+            <text x="255" y="40" font-size="12" fill="#d35400">信息瓶颈 (Encoder)</text>
+            
+            <rect x="340" y="70" width="40" height="20" fill="#2ecc71" />
+            <text x="342" y="85" font-size="10" fill="#fff">Token</text>
+            
+            <path d="M380 80 L 450 80" stroke="#333" fill="none" marker-end="url(#arrowhead)" />
+            <rect x="460" y="40" width="120" height="80" rx="5" fill="#ecf0f1" stroke="#333" />
+            <text x="475" y="85" font-size="12">解码后动作参考</text>
+          </svg>
+          <p class="caption">图 4.2: <span class="term-tooltip">信息瓶颈<span class="tooltip-text">通过压缩层强制智能体学习最重要的特征，过滤掉冗余信息。</span></span>示意图</p>
+        </div>
+
+        <div class="analogy-box">
+          <strong>生活比喻：</strong> 
+          当你和队友在嘈杂的工地干活，由于噪音太大（带宽极低），你没法喊一长串句子（高维状态）。你只能打手势或者喊一个字，比如“看！”（State）或者“跑！”（Intent）。
+        </div>
+      </div>
+    </details>
+
+    <details class="concept-block" open>
+      <summary>发送状态 (State) 还是发送计划 (Plan)？</summary>
+      <div class="block-content">
+        <p>
+          在极低带宽下，智能体面临一个选择：我该告诉别人“我看到了什么”，还是告诉别人“我打算做什么”？
+        </p>
+        <p>
+          核心原则是：<strong>发送那些最能减少接收者决策不确定性的信息。</strong>
+        </p>
+        <ul>
+          <li><strong>发送状态 (State)：</strong> 如果对方完全不知道你在哪、环境发生了什么变化，告诉他环境状态最有价值。</li>
+          <li><strong>发送计划 (Plan/Intent)：</strong> 如果对方能大致观察到你的位置（观察有重叠），但他猜不到你的下一步意图，那么告诉他你的计划更具协作意义。</li>
+        </ul>
+
+        <div class="example-box">
+          <strong>搜索救援示例：</strong> 
+          两名搜救员在废墟中。搜救员 A 发现了幸存者，但无线电快没电了，只能发送 2 个 Bit（4 种可能的消息）。
+          <ul>
+            <li><strong>情况 1：</strong> 搜救员 B 就在附近，看得到 A 进入了哪个房间。此时 A 发送“幸存者位置”是冗余的。A 应该发送“进来帮忙”（意图），减少 B 犹豫是否要继续搜索别处的概率。</li>
+            <li><strong>情况 2：</strong> 搜救员 B 在大楼另一侧，完全不知道 A 在哪。此时 A 发送“我在南区”（状态）比发送“快过来”更有意义，因为 B 根本不知道往哪走。</li>
+          </ul>
+        </div>
+
+        <div class="key-insight">
+          带宽限制不是通信的敌人，而是通信的老师 — 它迫使智能体学会信息压缩和优先级排序，这反而可能提升系统的泛化能力，避免过拟合到冗余的细节上。
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <section class="quiz-section">
+    <h3>🧪 自测：你真的理解了吗？</h3>
+    <div class="quiz-item">
+      <div class="quiz-q">Q1: 为什么在大规模多智能体系统中（如 1000 个智能体），P2P 通信很难实现？</div>
+      <button class="quiz-toggle-btn">查看答案</button>
+      <div class="quiz-a">消息量随数量平方级增长，硬件带宽无法承受。当智能体数为 N 时，P2P 需要 O(N²) 的通信链路，这在实际部署中是不可承受的。</div>
+    </div>
+    <div class="quiz-item">
+      <div class="quiz-q">Q2: 关于代理中转（Proxy Hub）模式的风险，以下描述正确的是？</div>
+      <button class="quiz-toggle-btn">查看答案</button>
+      <div class="quiz-a">如果代理节点失效，系统可能失去全局协作能力。代理中转会引入单点故障风险，一旦中心节点崩溃，整个通信拓扑就会瞬间失效。</div>
+    </div>
+    <div class="quiz-item">
+      <div class="quiz-q">Q3: 在极低带宽环境下，决定“发什么”的最关键因素是？</div>
+      <button class="quiz-toggle-btn">查看答案</button>
+      <div class="quiz-a">哪个信息最能减少队友的决策不确定性。带宽有限时，智能体必须学会评估每条消息的价值，优先发送对队友决策影响最大的信息。</div>
+    </div>
+  </section>
+  <div class="page-nav">
+    <a class="prev" href="communication.html">← 上一章：通信的三层作用</a>
+    <a class="next" href="symmetry.html">下一章：对称性与角色分工 →</a>
+  </div>
+</main>
+<script src="../app.js"></script>
+</body>
+</html>

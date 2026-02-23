@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MARL通信学习笔记 — 目录</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<button id="sidebar-toggle">☰</button>
+
+<aside id="sidebar">
+  <div class="sidebar-header">
+    <a href="index.html">📘 MARL 通信笔记</a>
+    <input type="text" id="search-box" placeholder="搜索关键词…">
+  </div>
+  <nav>
+    <ul>
+      <li><span class="nav-section-title">概览</span></li>
+      <li><a href="index.html">首页 · 论文定位</a></li>
+
+      <li><span class="nav-section-title">基础篇</span></li>
+      <li><a href="pages/nonstationarity.html">非平稳性与MARL基础</a></li>
+      <li><a href="pages/ctde.html">CTDE范式</a></li>
+
+      <li><span class="nav-section-title">通信篇</span></li>
+      <li><a href="pages/communication.html">通信的三层作用</a></li>
+      <li><a href="pages/bandwidth.html">代理通信与带宽限制</a></li>
+
+      <li><span class="nav-section-title">协作篇</span></li>
+      <li><a href="pages/symmetry.html">对称性与角色分工</a></li>
+
+      <li><span class="nav-section-title">总结</span></li>
+      <li><a href="pages/takeaways.html">终极总结</a></li>
+    </ul>
+  </nav>
+</aside>
+
+<main id="main">
+  <h1>MARL中的通信：一份学习地图</h1>
+  <p class="page-subtitle">基于「Communication in Multi-Agent Reinforcement Learning」综述的学习笔记，帮你从零理解多智能体为什么需要通信、怎么通信、以及设计通信时要考虑什么。</p>
+
+  <div class="hero-summary">
+    <p><strong>这篇综述做了什么？</strong> 它不是提出一个新算法，而是给整个"MARL + 通信"领域画了一张地图。作者提出了一个 <strong>9维分类框架</strong>，从"谁在说话"、"说什么"、"什么时候说"、"怎么学"等维度，把现有几十篇论文归类整理。目标是让研究者（和我们学习者）快速定位：某篇工作在这张地图上处于什么位置，还有哪些空白值得探索。</p>
+    <p>本笔记不逐条复述论文，而是抓出 <strong>6条核心机制链路</strong>，配上生活类比和极简例子，帮你建立直觉。</p>
+  </div>
+
+  <!-- SVG: 9-dimension overview map -->
+  <div class="svg-container">
+    <svg viewBox="0 0 760 320" xmlns="http://www.w3.org/2000/svg" style="font-family: 'Segoe UI', 'PingFang SC', sans-serif;">
+      <!-- Central node -->
+      <rect x="280" y="120" width="200" height="60" rx="12" fill="#2563eb" stroke="#1d4ed8" stroke-width="2"/>
+      <text x="380" y="148" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">MARL + 通信</text>
+      <text x="380" y="166" text-anchor="middle" fill="#dbeafe" font-size="11">9维分类框架</text>
+
+      <!-- Left column -->
+      <rect x="20" y="10" width="160" height="36" rx="8" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5"/>
+      <text x="100" y="33" text-anchor="middle" fill="#16a34a" font-size="11" font-weight="600">① 信道类型</text>
+
+      <rect x="20" y="56" width="160" height="36" rx="8" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5"/>
+      <text x="100" y="79" text-anchor="middle" fill="#16a34a" font-size="11" font-weight="600">② 通信对象</text>
+
+      <rect x="20" y="102" width="160" height="36" rx="8" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5"/>
+      <text x="100" y="125" text-anchor="middle" fill="#16a34a" font-size="11" font-weight="600">③ 消息内容</text>
+
+      <rect x="20" y="148" width="160" height="36" rx="8" fill="#ffedd5" stroke="#ea580c" stroke-width="1.5"/>
+      <text x="100" y="171" text-anchor="middle" fill="#ea580c" font-size="11" font-weight="600">④ 通信时机</text>
+
+      <rect x="20" y="194" width="160" height="36" rx="8" fill="#ffedd5" stroke="#ea580c" stroke-width="1.5"/>
+      <text x="100" y="217" text-anchor="middle" fill="#ea580c" font-size="11" font-weight="600">⑤ 带宽限制</text>
+
+      <!-- Right column -->
+      <rect x="580" y="10" width="160" height="36" rx="8" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+      <text x="660" y="33" text-anchor="middle" fill="#7c3aed" font-size="11" font-weight="600">⑥ 学习方式</text>
+
+      <rect x="580" y="56" width="160" height="36" rx="8" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+      <text x="660" y="79" text-anchor="middle" fill="#7c3aed" font-size="11" font-weight="600">⑦ 消息处理</text>
+
+      <rect x="580" y="102" width="160" height="36" rx="8" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+      <text x="660" y="125" text-anchor="middle" fill="#7c3aed" font-size="11" font-weight="600">⑧ 网络拓扑</text>
+
+      <rect x="580" y="148" width="160" height="36" rx="8" fill="#fee2e2" stroke="#dc2626" stroke-width="1.5"/>
+      <text x="660" y="171" text-anchor="middle" fill="#dc2626" font-size="11" font-weight="600">⑨ 评估方法</text>
+
+      <!-- Lines left -->
+      <line x1="180" y1="28" x2="280" y2="140" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4"/>
+      <line x1="180" y1="74" x2="280" y2="145" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4"/>
+      <line x1="180" y1="120" x2="280" y2="148" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4"/>
+      <line x1="180" y1="166" x2="280" y2="152" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4"/>
+      <line x1="180" y1="212" x2="280" y2="158" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4"/>
+
+      <!-- Lines right -->
+      <line x1="480" y1="140" x2="580" y2="28" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4"/>
+      <line x1="480" y1="145" x2="580" y2="74" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4"/>
+      <line x1="480" y1="148" x2="580" y2="120" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4"/>
+      <line x1="480" y1="155" x2="580" y2="166" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4"/>
+
+      <!-- Bottom legend -->
+      <text x="380" y="220" text-anchor="middle" fill="#64748b" font-size="10">本笔记聚焦标橙/标红维度 — 它们与"通信为什么重要"最直接相关</text>
+
+      <!-- Bottom boxes: our notes mapping -->
+      <rect x="60" y="250" width="130" height="50" rx="8" fill="#f0f9ff" stroke="#bae6fd" stroke-width="1.5"/>
+      <text x="125" y="271" text-anchor="middle" fill="#2563eb" font-size="10" font-weight="600">基础 · 非平稳</text>
+      <text x="125" y="288" text-anchor="middle" fill="#64748b" font-size="9">→ 维度②③④</text>
+
+      <rect x="210" y="250" width="130" height="50" rx="8" fill="#f0f9ff" stroke="#bae6fd" stroke-width="1.5"/>
+      <text x="275" y="271" text-anchor="middle" fill="#2563eb" font-size="10" font-weight="600">CTDE vs 通信</text>
+      <text x="275" y="288" text-anchor="middle" fill="#64748b" font-size="9">→ 维度⑥⑦</text>
+
+      <rect x="360" y="250" width="130" height="50" rx="8" fill="#f0f9ff" stroke="#bae6fd" stroke-width="1.5"/>
+      <text x="425" y="271" text-anchor="middle" fill="#2563eb" font-size="10" font-weight="600">通信三层作用</text>
+      <text x="425" y="288" text-anchor="middle" fill="#64748b" font-size="9">→ 维度①③⑤⑧</text>
+
+      <rect x="510" y="250" width="140" height="50" rx="8" fill="#f0f9ff" stroke="#bae6fd" stroke-width="1.5"/>
+      <text x="580" y="271" text-anchor="middle" fill="#2563eb" font-size="10" font-weight="600">带宽 · 对称 · 总结</text>
+      <text x="580" y="288" text-anchor="middle" fill="#64748b" font-size="9">→ 维度④⑤⑧⑨</text>
+    </svg>
+  </div>
+
+  <h2>章节导航</h2>
+  <div class="chapter-grid">
+    <a class="chapter-card" href="pages/nonstationarity.html">
+      <div class="card-num">1</div>
+      <div class="card-body">
+        <h3>非平稳性与MARL基础</h3>
+        <p>什么是多智能体强化学习？为什么"队友在变"会让训练炸掉？部分可观测又意味着什么？</p>
+      </div>
+    </a>
+    <a class="chapter-card" href="pages/ctde.html">
+      <div class="card-num">2</div>
+      <div class="card-body">
+        <h3>CTDE范式：集中训练、分散执行</h3>
+        <p>Centralized critic 能做什么、不能做什么？它为什么不能替代通信？</p>
+      </div>
+    </a>
+    <a class="chapter-card" href="pages/communication.html">
+      <div class="card-num">3</div>
+      <div class="card-body">
+        <h3>通信的三层作用</h3>
+        <p>信息层、结构层、优化层 — 通信不只是"传消息"，它在改变策略函数的形状。</p>
+      </div>
+    </a>
+    <a class="chapter-card" href="pages/bandwidth.html">
+      <div class="card-num">4</div>
+      <div class="card-body">
+        <h3>代理通信与带宽限制</h3>
+        <p>Proxy hub vs P2P、bit vs token、低带宽下"说什么最值钱"。</p>
+      </div>
+    </a>
+    <a class="chapter-card" href="pages/symmetry.html">
+      <div class="card-num">5</div>
+      <div class="card-body">
+        <h3>对称性与角色分工</h3>
+        <p>为什么仅靠随机打破对称不够？通信如何实现稳定的动态角色协商？</p>
+      </div>
+    </a>
+    <a class="chapter-card" href="pages/takeaways.html">
+      <div class="card-num">6</div>
+      <div class="card-body">
+        <h3>终极总结</h3>
+        <p>通信的本质不是"多传信息"，而是引入可学习的信息流结构。</p>
+      </div>
+    </a>
+  </div>
+
+  <div class="key-insight">
+    <strong>阅读建议：</strong>建议按顺序阅读。每页开头有核心概括，每个概念有生活类比和双智能体极简例子。每节末有自测题，可以边读边验证理解。
+  </div>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>

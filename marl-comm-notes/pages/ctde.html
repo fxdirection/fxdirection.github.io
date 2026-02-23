@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CTDE范式 — MARL通信笔记</title>
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<div id="progress-bar"></div>
+<button id="sidebar-toggle">☰</button>
+<aside id="sidebar">
+  <div class="sidebar-header">
+    <a href="../index.html">📘 MARL 通信笔记</a>
+    <input type="text" id="search-box" placeholder="搜索关键词…">
+  </div>
+  <nav>
+    <ul>
+      <li><span class="nav-section-title">概览</span></li>
+      <li><a href="../index.html">首页 · 论文定位</a></li>
+      <li><span class="nav-section-title">基础篇</span></li>
+      <li><a href="nonstationarity.html">非平稳性与MARL基础</a></li>
+      <li><a href="ctde.html" class="active">CTDE范式</a></li>
+      <li><span class="nav-section-title">通信篇</span></li>
+      <li><a href="communication.html">通信的三层作用</a></li>
+      <li><a href="bandwidth.html">代理通信与带宽限制</a></li>
+      <li><span class="nav-section-title">协作篇</span></li>
+      <li><a href="symmetry.html">对称性与角色分工</a></li>
+      <li><span class="nav-section-title">总结</span></li>
+      <li><a href="takeaways.html">终极总结</a></li>
+    </ul>
+  </nav>
+</aside>
+<main id="main">
+  <h1>CTDE范式：集中训练、分散执行</h1>
+  <p class="page-subtitle">
+    在多智能体系统中，如何让群体既能在训练时“全知全能”，又能在实战中“独当一面”？
+    <span class="term-tooltip">集中训练<span class="tooltip-text">在实验或仿真环境下，利用全局状态信息指导智能体学习的方法。</span></span>
+    与
+    <span class="term-tooltip">分散执行<span class="tooltip-text">在部署阶段，每个智能体仅依靠自己的局部观测做出决策的过程。</span></span>
+    （CTDE）正是解决这一矛盾的核心架构。
+  </p>
+
+  <details class="concept-block" open>
+    <summary>核心定义：什么是 CTDE？</summary>
+    <div class="block-content">
+      <p>CTDE（Centralized Training Decentralized Execution）是一种主流的学习架构。它允许我们在算法“闭关修炼”时提供额外的信息支持（如队友的状态、全局地图、对手的动作），但在“出山实战”时，要求每个智能体必须仅凭自己的眼睛（局部观测）做出反应。</p>
+      
+      <div class="analogy-box">
+        <span class="tag tag-analogy">生活类比</span>
+        足球队的复盘与实战。在**集中训练**阶段，教练可以暂停录像，从上帝视角分析每个球员的跑位。但在**分散执行**的正式比赛中，球员必须在视野有限的场上独立判断，无法随时听取看台上的战术分析。
+      </div>
+
+      <div class="example-box">
+        <span class="tag tag-example">双智能体案例</span>
+        在无人机协同搜索任务中，**训练时**服务器可以获取所有无人机的实时坐标。**执行时**，每架无人机只能根据自己的载机雷达信号判断环境，并尝试猜测队友的位置。
+      </div>
+    </div>
+  </details>
+
+  <details class="concept-block" open>
+    <summary>Actor 与 Critic 的分工：上帝与执行者</summary>
+    <div class="block-content">
+      <p>CTDE 成功的关键在于解耦了
+        <span class="term-tooltip">Actor<span class="tooltip-text">执行者，即策略网络，负责将观测映射为具体的动作。</span></span>
+        和
+        <span class="term-tooltip">Critic<span class="tooltip-text">评价者，即价值网络，负责评估当前状态或动作的好坏。</span></span>。
+      </p>
+      <ul>
+        <li><strong>Actor（分散式）：</strong> 每个代理都有自己的策略网络，输入是局部观测 $o_i$，输出是动作 $a_i$。它是执行阶段的唯一核心。</li>
+        <li><strong>Critic（集中式）：</strong> 训练器拥有一个（或一组）强大的评价网络，输入是全局状态 $S$ 和所有人的动作 $\mathbf{a}$。它只负责在训练时给 Actor 打分。</li>
+      </ul>
+
+      <div class="analogy-box">
+        <span class="tag tag-analogy">生活类比</span>
+        电影制作。导演（Critic）在监视器后看着全局画面，指导演员（Actor）如何走位。电影上映（执行）时，观众只能看到演员的表现，导演并不会出现在银幕上左右演员的动作。
+      </div>
+    </div>
+  </details>
+
+  <details class="concept-block" open>
+    <summary>架构对比：训练与执行的鸿沟</summary>
+    <div class="block-content">
+      <div class="svg-container">
+        <!-- SVG diagram showing Training vs Execution -->
+        <svg viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg">
+          <!-- Training Phase -->
+          <rect x="20" y="20" width="250" height="260" rx="10" fill="#f0f7ff" stroke="#2563eb" stroke-dasharray="4"/>
+          <text x="30" y="45" font-weight="bold" fill="#1e40af">集中训练阶段 (Training)</text>
+          <rect x="50" y="70" width="80" height="40" rx="5" fill="#3b82f6" />
+          <text x="65" y="95" fill="white" font-size="12">Actor A</text>
+          <rect x="50" y="120" width="80" height="40" rx="5" fill="#3b82f6" />
+          <text x="65" y="145" fill="white" font-size="12">Actor B</text>
+          <rect x="160" y="70" width="90" height="90" rx="10" fill="#ef4444" />
+          <text x="175" y="110" fill="white" font-size="12" font-weight="bold">Centralized</text>
+          <text x="185" y="130" fill="white" font-size="12" font-weight="bold">Critic</text>
+          <path d="M 130 90 L 160 115" stroke="#64748b" stroke-width="2" marker-end="url(#arrowhead)"/>
+          <path d="M 130 140 L 160 115" stroke="#64748b" stroke-width="2" marker-end="url(#arrowhead)"/>
+          <text x="70" y="200" font-size="11" fill="#64748b">全局信息辅助打分</text>
+          
+          <!-- Execution Phase -->
+          <rect x="330" y="20" width="250" height="260" rx="10" fill="#fef2f2" stroke="#dc2626"/>
+          <text x="340" y="45" font-weight="bold" fill="#991b1b">分散执行阶段 (Execution)</text>
+          <rect x="360" y="70" width="80" height="40" rx="5" fill="#3b82f6" />
+          <text x="375" y="95" fill="white" font-size="12">Actor A</text>
+          <rect x="360" y="120" width="80" height="40" rx="5" fill="#3b82f6" />
+          <text x="375" y="145" fill="white" font-size="12">Actor B</text>
+          <line x1="480" y1="70" x2="480" y2="160" stroke="#e2e8f0" stroke-width="4" stroke-dasharray="8"/>
+          <text x="470" y="115" fill="#94a3b8" transform="rotate(90 470,115)">CRITIC REMOVED</text>
+          <text x="380" y="200" font-size="11" fill="#b91c1c">信息孤岛：仅靠局部观测</text>
+
+          <!-- Marker -->
+          <defs>
+            <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+              <polygon points="0 0, 10 3.5, 0 7" fill="#64748b" />
+            </marker>
+          </defs>
+        </svg>
+      </div>
+      <p class="key-insight">
+        集中式 Critic 的核心意义在于：它解决了非平稳性问题。因为它在评估 Actor A 的表现时，能看到 Actor B 此时正在做什么，从而把“环境的变化”归因于“队友的动作”，让反馈信号变得稳定。
+      </p>
+    </div>
+  </details>
+
+  <details class="concept-block" open>
+    <summary>信用分配：谁是真正的功臣？</summary>
+    <div class="block-content">
+      <p>当团队获得总分奖励时，
+        <span class="term-tooltip">信用分配<span class="tooltip-text">判断每个智能体对团队最终奖励的具体贡献份额。</span></span>
+        是 MARL 的终极难题。集中式 Critic 就像一个公正的审计员，它分析全局数据，辨别出谁在“摸鱼”，谁在“Carry”。
+      </p>
+
+      <div class="example-box">
+        <span class="tag tag-example">双智能体案例</span>
+        在塔防游戏中，A 负责减速敌军，B 负责输出伤害。如果没有集中式 Critic，B 可能会认为全是自己的功劳（因为击杀数高），而 A 会感到困惑。集中式 Critic 能识别出：正是 A 的控制才让 B 的输出成为可能，从而给 A 发放更高的隐含奖励。
+      </div>
+    </div>
+  </details>
+
+  <details class="concept-block" open>
+    <summary>为什么集中式 Critic 不能代替通信？</summary>
+    <div class="block-content">
+      <p>这是一个常见的误区：既然 Critic 已经知道了全局信息并教导了 Actor，那 Actor 还需要通信吗？答案是肯定的，因为存在以下两个致命缺口：</p>
+      
+      <div class="key-insight">
+        <ol>
+          <li><strong>存在时间差：</strong> 执行阶段 Critic 根本不在场。Actor 的逻辑判断必须在瞬间完成，它没有上帝视角的回放可以参考。</li>
+          <li><strong>信息结构不变：</strong> Critic 的作用只是改进了 Actor 的参数（大脑），但并没有改变 Actor 的输入。如果 A 看不到掩体后的 B，无论 Critic 怎么训练它，A 在执行时依然看不到 B。</li>
+        </ol>
+      </div>
+
+      <p>通信的本质作用是<strong>改变 Actor 的输入</strong>。它将原本只有 $o_i$ 的决策输入，扩展为 $(o_i, m_j)$（自己的观测 + 队友的消息）。这种感知能力的物理性提升，是单纯靠参数优化无法弥补的。</p>
+    </div>
+  </details>
+
+  <section class="quiz-section">
+    <h2>🎯 知识自测</h2>
+    <div class="quiz-item">
+      <div class="quiz-q">1. 在 CTDE 范式中，哪个组件仅在训练阶段使用，而在执行阶段被移除？</div>
+      <button class="quiz-toggle-btn">查看答案</button>
+      <div class="quiz-a">答案：集中式 Critic (Centralized Critic)。执行阶段只保留每个代理的 Actor（策略网络）。</div>
+    </div>
+    <div class="quiz-item">
+      <div class="quiz-q">2. 集中式 Critic 如何解决“非平稳性”带来的训练波动？</div>
+      <button class="quiz-toggle-btn">查看答案</button>
+      <div class="quiz-a">答案：通过在打分时引入全局状态和所有人的动作。这样当环境发生变化时，Critic 能识别出这是由于其他智能体的行为导致的，而不是单纯的随机噪声或不可靠的局部观测。</div>
+    </div>
+    <div class="quiz-item">
+      <div class="quiz-q">3. 即使有了完美的集中式 Critic，智能体在执行阶段可能面临的最大挑战是什么？</div>
+      <button class="quiz-toggle-btn">查看答案</button>
+      <div class="quiz-a">答案：局部观测受限（信息不完全）。因为执行阶段没有 Critic 的上帝视角，如果环境存在严重的局部遮挡或动态干扰，智能体依然需要通过通信来同步信息。</div>
+    </div>
+  </section>
+
+  <nav class="page-nav">
+    <a href="nonstationarity.html" class="prev">← 上一页：非平稳性与基础</a>
+    <a href="communication.html" class="next">下一页：通信的三层作用 →</a>
+  </nav>
+</main>
+<script src="../app.js"></script>
+</body>
+</html>

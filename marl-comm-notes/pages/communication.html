@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>通信的三层作用 : MARL通信笔记</title>
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<div id="progress-bar"></div>
+<button id="sidebar-toggle">☰</button>
+<aside id="sidebar">
+  <div class="sidebar-header">
+    <a href="../index.html">📘 MARL 通信笔记</a>
+    <input type="text" id="search-box" placeholder="搜索关键词…">
+  </div>
+  <nav>
+    <ul>
+      <li><span class="nav-section-title">概览</span></li>
+      <li><a href="../index.html">首页 · 论文定位</a></li>
+      <li><span class="nav-section-title">基础篇</span></li>
+      <li><a href="nonstationarity.html">非平稳性与MARL基础</a></li>
+      <li><a href="ctde.html">CTDE范式</a></li>
+      <li><span class="nav-section-title">通信篇</span></li>
+      <li><a href="communication.html">通信的三层作用</a></li>
+      <li><a href="bandwidth.html">代理通信与带宽限制</a></li>
+      <li><span class="nav-section-title">协作篇</span></li>
+      <li><a href="symmetry.html">对称性与角色分工</a></li>
+      <li><span class="nav-section-title">总结</span></li>
+      <li><a href="takeaways.html">终极总结</a></li>
+    </ul>
+  </nav>
+</aside>
+<main id="main">
+  <h1>通信的三层作用</h1>
+  <p class="page-subtitle">
+    在多智能体强化学习中，通信不只是简单的数据交换。它在三个截然不同的层面发挥作用，分别解决信息缺失、逻辑重构和学习效率的问题。理解这三层作用是设计高效通信机制的前提。
+  </p>
+
+  <svg viewBox="0 0 500 350" xmlns="http://www.w3.org/2000/svg" style="display: block; margin: 2rem auto; max-width: 100%; border: 1px solid #eee; border-radius: 8px; background: #fafafa;">
+    <defs>
+      <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+        <path d="M0,0 L10,5 L0,10 Z" fill="#666" />
+      </marker>
+    </defs>
+    <rect x="50" y="30" width="400" height="70" rx="10" fill="#fff9c4" stroke="#fbc02d" stroke-width="2" />
+    <text x="250" y="60" text-anchor="middle" font-family="sans-serif" font-weight="bold" font-size="16">Layer 3: 优化层 (Optimization Layer)</text>
+    <text x="250" y="85" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#555">打破对称性, 提升样本效率, 加速策略收敛</text>
+    <rect x="50" y="140" width="400" height="70" rx="10" fill="#e1f5fe" stroke="#0288d1" stroke-width="2" />
+    <text x="250" y="170" text-anchor="middle" font-family="sans-serif" font-weight="bold" font-size="16">Layer 2: 结构层 (Structural Layer)</text>
+    <text x="250" y="195" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#555">重塑策略函数形式, 引入协作归纳偏置</text>
+    <rect x="50" y="250" width="400" height="70" rx="10" fill="#e8f5e9" stroke="#388e3c" stroke-width="2" />
+    <text x="250" y="280" text-anchor="middle" font-family="sans-serif" font-weight="bold" font-size="16">Layer 1: 信息层 (Information Layer)</text>
+    <text x="250" y="305" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#555">扩充观测范围, 同步意图, 缓解非平稳性</text>
+    <line x1="250" y1="250" x2="250" y2="215" stroke="#666" stroke-width="2" marker-end="url(#arrow)" />
+    <line x1="250" y1="140" x2="250" y2="105" stroke="#666" stroke-width="2" marker-end="url(#arrow)" />
+  </svg>
+
+  <details class="concept-block" open>
+    <summary>Layer 1: 信息层 (Information Layer)</summary>
+    <div class="block-content">
+      <p>信息层是通信最直观的作用，它直接解决了“看不全”的问题。</p>
+      <ul>
+        <li><strong>补偿部分可观测性 (Partial Observability)</strong>：智能体可以通过消息“借用”队友的视野，补全自己观测不到的死角。</li>
+        <li><strong>暴露意图 (Exposing Intent)</strong>：知道队友计划做什么，比单纯观察他们已经做了什么更有意义。意图的同步大大减少了误判。</li>
+        <li><strong>降低非平稳性 (Non-stationarity)</strong>：如果我能通过通信掌握你的意图，你的行为对我来说就不再是不可预测的随机波动。</li>
+      </ul>
+      <div class="analogy-box">
+        <strong>生活类比：</strong>室友之间共享 Google 日历。即使没有面对面交谈，通过日历也能知道对方何时使用厨房，从而避免冲突。
+      </div>
+      <div class="example-box">
+        <strong>双智能体案例：</strong>在仓库配送任务中，机器人 A 发现左侧过道有掉落的货物（路障）。它立即发信给正在靠近的机器人 B。机器人 B 提前选择绕行，省去了在死胡同里调头的时间。
+      </div>
+    </div>
+  </details>
+
+  <details class="concept-block" open>
+    <summary>Layer 2: 结构层 (Structural Layer)</summary>
+    <div class="block-content">
+      <p>结构层关注的是决策逻辑的本质改变。</p>
+      <ul>
+        <li><strong>改变策略函数 (Policy Function)</strong>：决策函数从单纯依赖观测 π_i(o_i) 变成了依赖观测与消息 π_i(o_i, m_i)。这在数学定义上彻底改变了智能体的大脑构造。</li>
+        <li><strong>引入协作<span class="term-tooltip">归纳偏置<span class="tooltip-text">算法中预设的假设，引导模型学习特定的协作模式</span></span> (Inductive Bias)</strong>：专门的消息聚合结构（如 Attention 机制）让模型“预期”到协作是通过显式信息流达成的。</li>
+        <li><strong>从隐式推断到显式流动</strong>：协作不再是基于观察的猜心游戏，而是变成了大脑之间通过消息建立的直接逻辑连接。</li>
+      </ul>
+      <div class="analogy-box">
+        <strong>生活类比：</strong>给篮球队员佩戴无线耳机。即便他们仍能通过眼神配合，耳机的存在让战术执行从“观察动作后反应”进化到了“听从指令后同步行动”的更高维度。
+      </div>
+      <div class="example-box">
+        <strong>双智能体案例：</strong>在协调博弈中，两名智能体需要选择相同的动作。没有通信时，它们在不断的冲突中艰难摸索。有了通信结构，一名智能体发送“我要去左边”，决策过程立即从猜测变成了执行既定计划。
+      </div>
+    </div>
+  </details>
+
+  <details class="concept-block" open>
+    <summary>Layer 3: 优化层 (Optimization Layer)</summary>
+    <div class="block-content">
+      <p>优化层体现了通信对整个系统学习效率的提升。</p>
+      <ul>
+        <li><strong>打破<span class="term-tooltip">对称性<span class="tooltip-text">同质智能体因初始状态相同而表现出的行为雷同性</span></span> (Breaking Symmetry)</strong>：原本相同的智能体可以通过协商快速区分角色，比如一人负责进攻，一人负责防守。</li>
+        <li><strong>减少无效<span class="term-tooltip">探索<span class="tooltip-text">智能体尝试新动作以寻找更优策略的过程</span></span> (Exploration)</strong>：智能体不需要重复检查队友已经确认过的死胡同，从而将精力集中在更有意义的任务上。</li>
+        <li><strong>提升<span class="term-tooltip">样本效率<span class="tooltip-text">算法利用有限训练数据达到目标性能的能力</span></span> (Sample Efficiency)</strong>：通信带来的丰富学习信号使得策略能够以更少的训练次数达成收敛。</li>
+      </ul>
+      <div class="analogy-box">
+        <strong>生活类比：</strong>学习小组分工整理笔记。每个人负责攻克一个章节并分享，这种方式比每个人都从头到尾读完所有书要高效得多。
+      </div>
+      <div class="example-box">
+        <strong>双智能体案例：</strong>在迷宫探索任务中，机器人 A 确认了北边的走廊是死路并通知了 B。B 接收信息后直接跳过北边，转而向南搜索。这种分工使得探索总效率提升了近一倍。
+      </div>
+    </div>
+  </details>
+
+  <div class="key-insight">
+    <strong>核心洞察：</strong>这三个层面并不是孤立的。信息层提供了决策的原材料，结构层搭建了处理信息的管道，而优化层则是整个系统最终展现出的学习红利。通信不应被视为插件，它是重塑多智能体学习问题的核心设计选择。
+  </div>
+
+  <section class="quiz-section">
+    <h3>🧪 自测：你真的理解了吗？</h3>
+    <div class="quiz-item">
+      <div class="quiz-q">Q1: 在“信息层”，通信主要解决了什么核心难题？</div>
+      <button class="quiz-toggle-btn">查看答案</button>
+      <div class="quiz-a">补偿局部观测不足并同步意图。通过同步状态来消除不确定性，弥合每个智能体只能看到局部信息的缺陷。</div>
+    </div>
+    <div class="quiz-item">
+      <div class="quiz-q">Q2: “结构层”引入通信后，策略函数发生了什么变化？</div>
+      <button class="quiz-toggle-btn">查看答案</button>
+      <div class="quiz-a">消息成为了 π_i(o_i, m_i) 中的显式变量。智能体的决策不再仅依赖自己的观测，而是同时考虑来自队友的消息。</div>
+    </div>
+    <div class="quiz-item">
+      <div class="quiz-q">Q3: 为什么通信可以提高“样本效率”？</div>
+      <button class="quiz-toggle-btn">查看答案</button>
+      <div class="quiz-a">因为它减少了智能体在环境中的无效探索。通过共享信息，智能体避免重复探索同样的路径，从而更快地收敛。</div>
+    </div>
+  </section>
+  <div class="page-nav">
+    <a class="prev" href="ctde.html">← 上一页: CTDE范式</a>
+    <a class="next" href="bandwidth.html">下一页: 代理通信与带宽限制 →</a>
+  </div>
+</main>
+<script src="../app.js"></script>
+</body>
+</html>
