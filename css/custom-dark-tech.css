@@ -273,11 +273,6 @@ blockquote {
   color: #00e5ff !important;
 }
 
-/* === 加载动画叠加层 === */
-#loading-box {
-  background: #0a0e17 !important;
-}
-
 /* === 移动端侧边栏 === */
 #sidebar_mobile_data {
   background: rgba(10, 14, 23, 0.98) !important;
