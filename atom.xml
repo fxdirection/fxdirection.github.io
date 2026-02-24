@@ -6,7 +6,7 @@
   <link href="https://fxdirection.github.io/atom.xml" rel="self"/>
   
   <link href="https://fxdirection.github.io/"/>
-  <updated>2026-02-23T12:35:21.484Z</updated>
+  <updated>2026-02-24T13:17:06.201Z</updated>
   <id>https://fxdirection.github.io/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>OpenCode 部署教程：从安装到模型接入</title>
+    <link href="https://fxdirection.github.io/2026/02/24/OpenCode%E9%83%A8%E7%BD%B2%E6%95%99%E7%A8%8B/"/>
+    <id>https://fxdirection.github.io/2026/02/24/OpenCode%E9%83%A8%E7%BD%B2%E6%95%99%E7%A8%8B/</id>
+    <published>2026-02-24T12:35:00.000Z</published>
+    <updated>2026-02-24T13:17:06.201Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="OpenCode-部署教程"><a href="#OpenCode-部署教程" class="headerlink" title="OpenCode 部署教程"></a>OpenCode 部署教程</h1><blockquote><p>📖 本文也提供了 <a href="/opencode-deploy-from-video/">独立阅读版本</a>，包含侧边导航、搜索和滚动定位。</p></blockquote><p>这篇内容是面向实战的 OpenCode 部署指南：先把 CLI 跑起来，再逐步接入桌面版、插件版和常见模型供应商。</p><hr><h2 id="1-四种使用形态"><a href="#1-四种使用形态" class="headerlink" title="1. 四种使用形态"></a>1. 四种使用形态</h2><p>OpenCode 常见的使用方式有四种：</p><ol><li>命令行（CLI）</li><li>桌面客户端（Desktop）</li><li>编辑器插件（例如 VS Code）</li><li>云端运行环境（Cloud）</li></ol><p>建议顺序是：<strong>先 CLI，再插件&#x2F;桌面，最后补云端</strong>。</p><hr><h2 id="2-安装命令行版（主流程）"><a href="#2-安装命令行版（主流程）" class="headerlink" title="2. 安装命令行版（主流程）"></a>2. 安装命令行版（主流程）</h2><h3 id="2-1-前置环境"><a href="#2-1-前置环境" class="headerlink" title="2.1 前置环境"></a>2.1 前置环境</h3><p>先安装 Node.js（建议 LTS 版本）。</p><h3 id="2-2-安装与启动"><a href="#2-2-安装与启动" class="headerlink" title="2.2 安装与启动"></a>2.2 安装与启动</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm install -g opencode-ai</span><br><span class="line">opencode</span><br></pre></td></tr></table></figure><h3 id="2-3-基础验证"><a href="#2-3-基础验证" class="headerlink" title="2.3 基础验证"></a>2.3 基础验证</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">opencode --version</span><br><span class="line">/models</span><br><span class="line">/connect</span><br></pre></td></tr></table></figure><p>如果以上命令都可用，说明核心链路已跑通。</p><hr><h2 id="3-安装桌面版（可选）"><a href="#3-安装桌面版（可选）" class="headerlink" title="3. 安装桌面版（可选）"></a>3. 安装桌面版（可选）</h2><ol><li>下载对应系统安装包并安装。</li><li>首次打开后选择项目目录。</li><li>进入模型列表确认 Provider 已加载。</li></ol><p>桌面版更适合轻量对话与快速体验；复杂工程任务依然建议以 CLI 为主。</p><hr><h2 id="4-安装-VS-Code-插件版"><a href="#4-安装-VS-Code-插件版" class="headerlink" title="4. 安装 VS Code 插件版"></a>4. 安装 VS Code 插件版</h2><ol><li>在扩展市场搜索并安装 <code>OpenCode</code>。</li><li>按 <code>Ctrl + Shift + P</code> 打开命令面板，执行 OpenCode 相关命令。</li><li>选中代码后可直接发送到 OpenCode 对话窗口，减少复制粘贴。</li></ol><p>插件版依赖本地 OpenCode 环境，所以请先完成 CLI 安装。</p><hr><h2 id="5-查看和切换模型"><a href="#5-查看和切换模型" class="headerlink" title="5. 查看和切换模型"></a>5. 查看和切换模型</h2><p>进入 OpenCode 后，先看当前模型列表：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/models</span><br></pre></td></tr></table></figure><p>建议先选一个可直接使用的模型跑小任务，确认工作流没问题，再做高级接入。</p><hr><h2 id="6-接入-Antigravity-相关模型"><a href="#6-接入-Antigravity-相关模型" class="headerlink" title="6. 接入 Antigravity 相关模型"></a>6. 接入 Antigravity 相关模型</h2><p>流程要点：</p><ol><li>安装对应插件（按插件文档执行）。</li><li>执行登录命令并完成浏览器授权。</li><li>回到 OpenCode 执行 <code>/models</code>，选择新增模型。</li></ol><p>常用入口命令：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/connect</span><br><span class="line">/models</span><br></pre></td></tr></table></figure><hr><h2 id="7-接入-Codex（OpenAI）"><a href="#7-接入-Codex（OpenAI）" class="headerlink" title="7. 接入 Codex（OpenAI）"></a>7. 接入 Codex（OpenAI）</h2><ol><li>执行 <code>/connect</code>。</li><li>选择 OpenAI 并完成浏览器授权。</li><li>执行 <code>/models</code> 切换到目标编码模型。</li></ol><p>完成后就可以在 OpenCode 里直接使用对应模型进行编码任务。</p><hr><h2 id="8-接入-OpenRouter"><a href="#8-接入-OpenRouter" class="headerlink" title="8. 接入 OpenRouter"></a>8. 接入 OpenRouter</h2><ol><li>在 OpenRouter 控制台申请 API Key。</li><li>在 OpenCode 执行 <code>/connect</code>，选择 OpenRouter 并粘贴密钥。</li><li>执行 <code>/models</code> 验证模型列表。</li></ol><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">/connect</span><br><span class="line"><span class="comment"># 选择 OpenRouter</span></span><br><span class="line"><span class="comment"># 填入 API Key</span></span><br><span class="line">/models</span><br></pre></td></tr></table></figure><hr><h2 id="9-推荐部署顺序（避免折腾）"><a href="#9-推荐部署顺序（避免折腾）" class="headerlink" title="9. 推荐部署顺序（避免折腾）"></a>9. 推荐部署顺序（避免折腾）</h2><ol><li>先完成 CLI 安装与版本验证。</li><li>接入一个主力 Provider（OpenAI 或 OpenRouter）。</li><li>再补充 Antigravity 等高级模型通道。</li><li>固定一个默认模型作为日常主模型。</li><li>最后接入 VS Code 插件提升效率。</li></ol><hr><h2 id="10-Session-并行协作建议"><a href="#10-Session-并行协作建议" class="headerlink" title="10. Session 并行协作建议"></a>10. Session 并行协作建议</h2><p>把不同任务拆成多个 Session：</p><ul><li>Session A：新功能开发</li><li>Session B：Bug 修复</li><li>Session C：重构&#x2F;性能优化</li></ul><p>这样能减少上下文干扰，也更方便回溯。</p><hr><h2 id="11-常见问题"><a href="#11-常见问题" class="headerlink" title="11. 常见问题"></a>11. 常见问题</h2><h3 id="Q1：opencode-提示命令不存在"><a href="#Q1：opencode-提示命令不存在" class="headerlink" title="Q1：opencode 提示命令不存在"></a>Q1：<code>opencode</code> 提示命令不存在</h3><p>通常是 npm 全局目录未加入 PATH。重开终端后重试；不行就检查 Node&#x2F;npm 的全局安装路径。</p><h3 id="Q2：-models-看不到刚接入的模型"><a href="#Q2：-models-看不到刚接入的模型" class="headerlink" title="Q2：/models 看不到刚接入的模型"></a>Q2：<code>/models</code> 看不到刚接入的模型</h3><p>检查三项：授权是否完成、Provider 是否连接成功、会话是否已重启。</p><h3 id="Q3：应该优先桌面版还是-CLI？"><a href="#Q3：应该优先桌面版还是-CLI？" class="headerlink" title="Q3：应该优先桌面版还是 CLI？"></a>Q3：应该优先桌面版还是 CLI？</h3><p>优先 CLI。桌面版与插件版更适合作为辅助入口。</p>]]></content>
+    
+    
+    <summary type="html">从命令行安装到插件与模型接入，完整梳理 OpenCode 的部署流程与推荐工作流。</summary>
+    
+    
+    
+    <category term="技术积累" scheme="https://fxdirection.github.io/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E7%B4%AF/"/>
+    
+    
+    <category term="开发工具" scheme="https://fxdirection.github.io/tags/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/"/>
+    
+    <category term="OpenCode" scheme="https://fxdirection.github.io/tags/OpenCode/"/>
+    
+    <category term="AI编程" scheme="https://fxdirection.github.io/tags/AI%E7%BC%96%E7%A8%8B/"/>
+    
+    <category term="模型接入" scheme="https://fxdirection.github.io/tags/%E6%A8%A1%E5%9E%8B%E6%8E%A5%E5%85%A5/"/>
+    
+  </entry>
   
   <entry>
     <title>多智能体强化学习中的通信机制——论文学习笔记</title>

@@ -2,6 +2,24 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://fxdirection.github.io/2026/02/24/OpenCode%E9%83%A8%E7%BD%B2%E6%95%99%E7%A8%8B/</loc>
+    
+    <lastmod>2026-02-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://fxdirection.github.io/opencode-guide/index.html</loc>
+    
+    <lastmod>2026-02-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://fxdirection.github.io/2025/12/17/VSCode-Git%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/</loc>
     
     <lastmod>2026-02-23</lastmod>
@@ -203,6 +221,27 @@
     <priority>0.2</priority>
   </url>
   
+  <url>
+    <loc>https://fxdirection.github.io/tags/OpenCode/</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://fxdirection.github.io/tags/AI%E7%BC%96%E7%A8%8B/</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://fxdirection.github.io/tags/%E6%A8%A1%E5%9E%8B%E6%8E%A5%E5%85%A5/</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
 
   
   <url>
@@ -214,6 +253,13 @@
   
   <url>
     <loc>https://fxdirection.github.io/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E5%BD%95/</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://fxdirection.github.io/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E7%B4%AF/</loc>
     <lastmod>2026-02-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
