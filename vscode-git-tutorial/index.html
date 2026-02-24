@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VS Code + Git 入门教程：像玩游戏一样存档</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<button id="sidebar-toggle">☰</button>
+
+<aside id="sidebar">
+  <div class="sidebar-header">
+    <a href="https://fxdirection.github.io">← 返回博客</a>
+    <h2>VS Code + Git 教程</h2>
+    <input type="text" id="search-box" placeholder="搜索关键词…">
+  </div>
+  <nav>
+    <ul>
+      <li><span class="nav-section-title">入门</span></li>
+      <li><a href="#intro">0. 核心概念：游戏存档</a></li>
+      <li><a href="#setup">1. 准备工作</a></li>
+      <li><a href="#config">2. 必做的初始配置</a></li>
+      <li><a href="#github-signup">3. 注册 GitHub 账号</a></li>
+
+      <li><span class="nav-section-title">实战流程</span></li>
+      <li><a href="#first-project">4. 开始你的第一个项目</a></li>
+      <li><a href="#commit">5. 保存第一个存档 (Commit)</a></li>
+      <li><a href="#graph">6. 查看存档进度 (Graph)</a></li>
+      <li><a href="#push">7. 同步到云端 (Push)</a></li>
+
+      <li><span class="nav-section-title">进阶与问题</span></li>
+      <li><a href="#proxy">8. 国内用户网络配置</a></li>
+      <li><a href="#sync">9. 解决进度偏差</a></li>
+      <li><a href="#gitignore">10. 忽略文件 (.gitignore)</a></li>
+      <li><a href="#cheatsheet">11. 常用命令速查表</a></li>
+      <li><a href="#resources">12. 推荐资源</a></li>
+    </ul>
+  </nav>
+</aside>
+
+<main id="main">
+  <h1>VS Code + Git 入门教程</h1>
+  <p class="page-subtitle">不需要懂复杂原理，会用就行。把写代码想象成玩游戏存档，30分钟快速上手。</p>
+
+  <section id="intro">
+    <h2>0. 核心概念：这不就是游戏存档吗？</h2>
+    <p>很多人第一次听到 Git 的定义，比如什么「分布式版本管理系统」，往往会被这些晦涩的术语搞晕。其实 Git 的核心逻辑非常简单，你可以直接把它理解为一个<strong>「游戏存档系统」</strong>。</p>
+    
+    <div class="analogy-box">
+      <ul>
+        <li><strong>Git</strong>：本地的存档系统。你写完一段代码，就相当于打到了一个新的游戏进度。</li>
+        <li><strong>Commit（提交）</strong>：按下「保存游戏」按钮。每次保存，你都要给这个存档起个名字（比如「打完第一个 Boss」或者「修正了登录 Bug」）。</li>
+        <li><strong>GitHub</strong>：游戏云服务器（比如 Steam 云）。</li>
+        <li><strong>Push（推送）</strong>：把你的本地存档上传到云端。这样就算你电脑炸了，也能在别的电脑上找回进度。</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="setup">
+    <h2>1. 准备工作</h2>
+    
+    <h3>1.1 安装 VS Code</h3>
+    <ol>
+      <li>访问官网：<a href="https://code.visualstudio.com" target="_blank">code.visualstudio.com</a></li>
+      <li>下载并安装。在安装过程中，<strong>务必勾选</strong>以下两个选项：
+        <ul>
+          <li>✅ 将"通过 Code 打开"操作添加到文件上下文菜单</li>
+          <li>✅ 将"通过 Code 打开"操作添加到目录上下文菜单</li>
+        </ul>
+      </li>
+    </ol>
+
+    <h3>1.2 安装 Git</h3>
+    <ol>
+      <li>访问官网：<a href="https://git-scm.com/downloads" target="_blank">git-scm.com/downloads</a></li>
+      <li>下载 Windows 版本。</li>
+      <li><strong>安装重点</strong>：在选择默认编辑器时，推荐从下拉菜单中选择 <strong>Visual Studio Code</strong>，而不是默认的 Vim。</li>
+      <li>在配置初始分支名时，建议选择 <strong>Override the default branch name for new repositories</strong>，并填入 <code>main</code>。</li>
+      <li>安装完成后，打开终端输入 <code>git --version</code>，看到版本号即表示成功。</li>
+    </ol>
+  </section>
+
+  <section id="config">
+    <h2>2. 必做的初始配置</h2>
+    <p>Git 在你第一次存档时，需要知道「这个档是谁存的」。如果你跳过这一步，后续提交代码会直接报错。</p>
+    
+    <pre><code>git config --global user.name "你的用户名"
+git config --global user.email "你的邮箱@example.com"</code></pre>
+
+    <div class="key-insight">
+      建议这里的用户名和邮箱与你之后注册的 GitHub 账号保持一致，这样 GitHub 才能正确识别你的贡献。
+    </div>
+  </section>
+
+  <section id="github-signup">
+    <h2>3. 注册 GitHub 账号</h2>
+    <ol>
+      <li>访问 <a href="https://github.com" target="_blank">github.com</a> 并点击 <strong>Sign up</strong>。</li>
+      <li>GitHub 就是你的「云端存档仓库」。在这里存代码不仅可以备份，还能让别人看到你的作品。</li>
+    </ol>
+  </section>
+
+  <section id="first-project">
+    <h2>4. 开始你的第一个项目</h2>
+    
+    <h3>4.1 创建文件夹</h3>
+    <p>在桌面创建一个文件夹，比如 <code>my-git-demo</code>，然后直接把它拖进 VS Code。</p>
+
+    <h3>4.2 编写代码</h3>
+    <p>新建一个 <code>index.html</code> 或 <code>hello.py</code>。随便写点内容并保存。</p>
+
+    <h3>4.3 初始化本地存档（git init）</h3>
+    <p>点击 VS Code 左侧侧边栏那个像「分支」一样的图标（<strong>源代码管理/Source Control</strong>）。你会看到一个 <strong>Initialize Repository（初始化仓库）</strong> 的按钮。点击它。</p>
+    
+    <div class="analogy-box">
+      这相当于在这个文件夹里安装了一个「存档插槽」，准备开始记录游戏进度。
+    </div>
+  </section>
+
+  <section id="commit">
+    <h2>5. 保存第一个存档 (Commit)</h2>
+    <p>初始化后，VS Code 会列出你刚才创建的文件。</p>
+    <ol>
+      <li>在顶部的消息框（Message）里输入存档名字，比如 <code>first save</code>。</li>
+      <li>点击 <strong>Commit（提交）</strong> 按钮。</li>
+      <li>如果是第一次操作，VS Code 可能会问你要不要自动暂存所有更改，点击 <strong>Always（总是）</strong> 即可。</li>
+    </ol>
+  </section>
+
+  <section id="graph">
+    <h2>6. 查看存档进度 (Graph)</h2>
+    <p>推荐安装 VS Code 的相关插件（或者使用内置的 Source Control Graph 面板），你可以直观地看到：</p>
+    <ul>
+      <li><span style="color:var(--green)">绿色的线</span>：代表你新增的代码。</li>
+      <li><span style="color:var(--red)">红色的线</span>：代表你删除的代码。</li>
+      <li><strong>节点</strong>：每一个节点就是一个存档。你可以随时点开，对比两个存档之间到底改了哪几行。</li>
+    </ul>
+  </section>
+
+  <section id="push">
+    <h2>7. 将存档同步到云端 (Push)</h2>
+    
+    <h3>7.1 方法一：直接从 VS Code 发布（最快）</h3>
+    <p>在源代码管理面板点击 <strong>Publish to GitHub</strong> 按钮。</p>
+    <ol>
+      <li><strong>OAuth 授权</strong>：浏览器会弹出页面，询问是否允许 VS Code 访问 GitHub 账号。点击 <strong>Authorize</strong> 允许。</li>
+      <li><strong>选择公开/私有</strong>：
+        <ul>
+          <li><strong>Public（公开）</strong>：全世界都能看到你的代码。</li>
+          <li><strong>Private（私有）</strong>：只有你自己（和你邀请的人）能看到。</li>
+        </ul>
+      </li>
+      <li>发布成功后，存档节点旁边多了一个「云朵」图标，代表本地和云端已经同步。</li>
+    </ol>
+
+    <h3>7.2 方法二：先在 GitHub 建库（更专业）</h3>
+    <ol>
+      <li>在 GitHub 首页点击右上角 <code>+</code> -> <strong>New repository</strong>。</li>
+      <li>填入名字（比如 <code>custom-project-name</code>），点击 <strong>Create</strong>。</li>
+      <li>在 VS Code 中点击源代码管理面板顶部的三个点 <code>...</code> -> <strong>Remote（远程）</strong> -> <strong>Add Remote（添加远程仓库）</strong>。</li>
+      <li>选择 <strong>Add remote from GitHub</strong>，找到你刚才建好的那个名字，选中它。</li>
+      <li>起个别名（比如 <code>origin</code> 或 <code>github</code>），最后点击底部的 <strong>Publish</strong> 或 <strong>Sync</strong>。</li>
+    </ol>
+  </section>
+
+  <section id="proxy">
+    <h2>8. 国内用户必读：配置网络代理</h2>
+    <p>由于网络环境原因，国内用户在推送（Push）到 GitHub 时经常会遇到连接超时的情况。</p>
+    
+    <pre><code># 设置 HTTP 代理
+git config --global http.proxy http://127.0.0.1:7890
+# 设置 HTTPS 代理
+git config --global https.proxy http://127.0.0.1:7890</code></pre>
+
+    <div class="tag tag-warning">注意</div>
+    <p>端口号（<code>7890</code>）需要根据你自己的代理软件实际设置来修改。</p>
+  </section>
+
+  <section id="sync">
+    <h2>9. 什么是本地与云端的「进度偏差」？</h2>
+    <p>当你又写了一些代码并做了本地 Commit，但还没执行 Push 时：</p>
+    <ul>
+      <li><strong>本地指针（main）</strong>：已经跑到了最新的存档。</li>
+      <li><strong>云端指针（origin/main）</strong>：还停留在上一次推送的位置。</li>
+    </ul>
+    
+    <div class="analogy-box">
+      这就是「本地领先于云端」。你只需要点击 <strong>Sync Changes（同步更改）</strong>，Git 就会把中间差的那几个存档全部推上去。
+    </div>
+  </section>
+
+  <section id="gitignore">
+    <h2>10. 进阶必备：.gitignore</h2>
+    <p>并不是所有文件都要上传到云端。有些文件（如缓存、系统缩略图、敏感配置）是不应该被存档的。</p>
+    
+    <pre><code># 忽略 Python 缓存
+__pycache__/
+*.pyc
+# 忽略本地配置
+.vscode/
+# 忽略系统杂质
+.DS_Store
+Thumbs.db</code></pre>
+  </section>
+
+  <section id="cheatsheet">
+    <h2>11. 常用 Git 命令速查表</h2>
+    <p>虽然 VS Code 的图形界面已经足够好用，但了解底层命令能让你更自信。</p>
+    <table>
+      <thead>
+        <tr>
+          <th>动作</th>
+          <th>命令行</th>
+          <th>VS Code 对应操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>初始化</td>
+          <td><code>git init</code></td>
+          <td>点击 Initialize Repository 按钮</td>
+        </tr>
+        <tr>
+          <td>查看状态</td>
+          <td><code>git status</code></td>
+          <td>查看侧边栏文件列表</td>
+        </tr>
+        <tr>
+          <td>存入暂存区</td>
+          <td><code>git add .</code></td>
+          <td>点击文件旁的 + 号</td>
+        </tr>
+        <tr>
+          <td>保存存档</td>
+          <td><code>git commit -m "消息"</code></td>
+          <td>输入消息并点击 Commit 按钮</td>
+        </tr>
+        <tr>
+          <td>传到云端</td>
+          <td><code>git push</code></td>
+          <td>点击 Sync Changes 或推送按钮</td>
+        </tr>
+        <tr>
+          <td>从云端拉取</td>
+          <td><code>git pull</code></td>
+          <td>点击同步按钮</td>
+        </tr>
+        <tr>
+          <td>克隆项目</td>
+          <td><code>git clone [URL]</code></td>
+          <td>在命令面板输入 Git: Clone</td>
+        </tr>
+        <tr>
+          <td>查看历史</td>
+          <td><code>git log</code></td>
+          <td>查看 Source Control Graph 面板</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="resources">
+    <h2>12. 推荐资源</h2>
+    <p>如果你想系统地从底层原理学习 Git，Git 官网推荐了一本免费开源的神书：</p>
+    <div class="concept-block">
+      <summary>《Pro Git》</summary>
+      <div class="block-content">
+        可以在 <a href="https://git-scm.com/book/zh/v2" target="_blank">git-scm.com/book/zh/v2</a> 免费在线阅读。它详细解释了 Git 内部的链表结构和哈希原理，适合进阶学习。
+      </div>
+    </div>
+  </section>
+  
+  <!-- Add extra space at bottom for scrolling -->
+  <div style="height: 100px;"></div>
+
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>

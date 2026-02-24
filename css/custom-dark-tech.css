@@ -1,63 +1,89 @@
 /* ========================================
-   Custom Dark Tech Aesthetic - 孤舸博客
-   深色科技感主题增强
+   Custom Light Warm Aesthetic - 孤舸博客
+   学术清新风 + 毛主席背景图主题（浅色版）
    ======================================== */
 
-/* === CSS 变量覆盖 (Dark Mode) === */
+/* === CSS 变量覆盖 (Light Warm Mode) === */
 [data-theme="dark"] {
-  --global-bg: #0a0e17;
-  --card-bg: rgba(15, 23, 42, 0.85);
-  --sidebar-bg: rgba(15, 23, 42, 0.9);
-  --font-color: #e2e8f0;
-  --hr-color: #1e293b;
-  --hljs-bg: #0f172a;
-  --pseudo-hover: #00e5ff;
-  --btn-hover-color: #7c3aed;
-  --btn-bg: #1e293b;
-  --text-bg-hover: rgba(0, 229, 255, 0.1);
-  --tab-button-bg: #1e293b;
-  --tab-botton-color: #94a3b8;
-  --card-border: 1px solid rgba(0, 229, 255, 0.08);
+  --global-bg: transparent;
+  --card-bg: rgba(255, 255, 255, 0.82);
+  --sidebar-bg: rgba(255, 255, 255, 0.88);
+  --font-color: #2d1f14;
+  --hr-color: #e5d5c5;
+  --hljs-bg: #faf5ef;
+  --pseudo-hover: #b8764e;
+  --btn-hover-color: #8c3a2b;
+  --btn-bg: rgba(255, 255, 255, 0.7);
+  --text-bg-hover: rgba(212, 165, 116, 0.12);
+  --tab-button-bg: rgba(255, 255, 255, 0.7);
+  --tab-botton-color: #6b5744;
+  --card-border: 1px solid rgba(180, 130, 80, 0.12);
 }
 
-/* === 全局背景 === */
+/* === 全局背景（毛主席图片） === */
+#web_bg {
+  background: url('/img/background.jpg') center center / cover no-repeat fixed !important;
+}
+
+/* 全局浅色遮罩 — 用 body::after 叠加在图片上，让背景图自然透出 */
 body {
-  background: linear-gradient(180deg, #0a0e17 0%, #0d1321 40%, #111827 100%) !important;
-  background-attachment: fixed !important;
+  background: transparent !important;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(250, 246, 240, 0.2);
+  pointer-events: none;
+  z-index: -1;
 }
 
 /* === 导航栏 === */
 #nav {
-  background: rgba(10, 14, 23, 0.92) !important;
-  backdrop-filter: blur(20px) saturate(1.5);
-  border-bottom: 1px solid rgba(0, 229, 255, 0.1);
+  background: rgba(255, 255, 255, 0.88) !important;
+  backdrop-filter: blur(20px) saturate(1.3);
+  border-bottom: 1px solid rgba(180, 130, 80, 0.15);
 }
 
 #nav a {
-  color: #e2e8f0 !important;
+  color: #3d2b1a !important;
   transition: color 0.3s, text-shadow 0.3s;
 }
 
 #nav a:hover {
-  color: #00e5ff !important;
-  text-shadow: 0 0 8px rgba(0, 229, 255, 0.5);
+  color: #b8764e !important;
+  text-shadow: 0 0 8px rgba(184, 118, 78, 0.3);
 }
 
-/* 搜索图标 */
+/* 搜索图标 + 文字 */
 #search-button {
-  color: #94a3b8 !important;
+  color: #3d2b1a !important;
+}
+#search-button span.site-page,
+#search-button span.site-page span,
+#search-button span.site-page i {
+  color: #3d2b1a !important;
+}
+#search-button:hover,
+#search-button:hover span.site-page,
+#search-button:hover span.site-page span,
+#search-button:hover span.site-page i {
+  color: #8c3a2b !important;
 }
 
-#search-button:hover {
-  color: #00e5ff !important;
-}
-
-/* === 首页 Hero === */
+/* === 首页 Hero — 保留背景图，只清除背景色 === */
 #page-header {
-  background: linear-gradient(135deg, #0a0e17 0%, #1a1040 50%, #0d1321 100%) !important;
+  background-color: transparent !important;
+  background-size: cover !important;
+  background-position: center center !important;
   min-height: 70vh;
 }
 
+/* 首页 Hero 底部渐变遮罩，浅色过渡到内容区 */
 #page-header::before {
   content: '';
   position: absolute;
@@ -65,25 +91,43 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background: radial-gradient(ellipse at 30% 50%, rgba(124, 58, 237, 0.15) 0%, transparent 60%),
-             radial-gradient(ellipse at 70% 30%, rgba(0, 229, 255, 0.1) 0%, transparent 50%);
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(250, 246, 240, 0.05) 50%,
+    rgba(250, 246, 240, 0.3) 100%
+  );
   pointer-events: none;
 }
 
 #page-header #site-title {
-  color: #f8fafc !important;
-  text-shadow: 0 0 30px rgba(0, 229, 255, 0.3), 0 0 60px rgba(124, 58, 237, 0.15);
+  color: #ffffff !important;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3), 0 0 30px rgba(212, 165, 116, 0.3);
   font-weight: 700;
   letter-spacing: 4px;
 }
 
 #page-header #site-subtitle {
-  color: #94a3b8 !important;
+  color: rgba(255, 255, 255, 0.9) !important;
 }
 
 /* 打字机效果光标 */
 #subtitle .typed-cursor {
-  color: #00e5ff !important;
+  color: #b8764e !important;
+}
+
+/* === 内页（文章页、归档页等）浅色遮罩 === */
+#page-header:not(.full_page) {
+  background-color: rgba(250, 246, 240, 0.5) !important;
+}
+
+#page-header:not(.full_page)::before {
+  background: rgba(250, 246, 240, 0.3) !important;
+}
+
+/* 内页内容区域底层模糊，提升可读性 */
+#content-inner {
+  position: relative;
 }
 
 /* === 卡片通用样式 === */
@@ -91,15 +135,15 @@ body {
 #aside-content .card-widget,
 .recent-post-item,
 #post {
-  background: rgba(15, 23, 42, 0.85) !important;
-  border: 1px solid rgba(0, 229, 255, 0.06) !important;
+  background: rgba(255, 255, 255, 0.85) !important;
+  border: 1px solid rgba(180, 130, 80, 0.1) !important;
   backdrop-filter: blur(10px);
   transition: all 0.3s ease;
 }
 
 .recent-post-item:hover {
-  border-color: rgba(0, 229, 255, 0.2) !important;
-  box-shadow: 0 8px 32px rgba(0, 229, 255, 0.08), 0 0 0 1px rgba(0, 229, 255, 0.1);
+  border-color: rgba(184, 118, 78, 0.25) !important;
+  box-shadow: 0 4px 16px rgba(180, 130, 80, 0.12);
   transform: translateY(-2px);
 }
 
@@ -110,27 +154,27 @@ body {
 
 .recent-post-item:hover .post_cover img {
   transform: scale(1.05);
-  filter: brightness(1.1);
+  filter: brightness(1.05);
 }
 
 /* === 侧边栏 === */
 #aside-content .card-widget {
-  border: 1px solid rgba(0, 229, 255, 0.06) !important;
+  border: 1px solid rgba(180, 130, 80, 0.1) !important;
 }
 
 #aside-content .card-info .author-info__name {
-  color: #f8fafc !important;
+  color: #2d1f14 !important;
 }
 
 #aside-content .card-info .author-info__description {
-  color: #94a3b8 !important;
+  color: #6b5744 !important;
   font-style: italic;
 }
 
 /* 头像光晕 */
 #aside-content .card-info .card-info-avatar .avatar-img {
-  box-shadow: 0 0 20px rgba(0, 229, 255, 0.2), 0 0 40px rgba(124, 58, 237, 0.1);
-  border: 2px solid rgba(0, 229, 255, 0.2);
+  box-shadow: 0 2px 12px rgba(180, 130, 80, 0.2);
+  border: 2px solid rgba(212, 165, 116, 0.4);
 }
 
 /* 标签云 */
@@ -139,32 +183,107 @@ body {
 }
 
 #aside-content .card-tag-cloud a:hover {
-  color: #00e5ff !important;
-  text-shadow: 0 0 8px rgba(0, 229, 255, 0.4);
+  color: #b8764e !important;
+  text-shadow: 0 0 8px rgba(184, 118, 78, 0.3);
+}
+
+/* === 文章卡片标题 === */
+.recent-post-info .article-title {
+  color: #2d1f14 !important;
+  font-weight: 600;
+}
+
+.recent-post-info .article-title:hover {
+  color: #8c3a2b !important;
+}
+
+/* === 侧边栏统计数字加深 === */
+.site-data a {
+  color: #3d2b1a !important;
+}
+.site-data .headline {
+  color: #5a4332 !important;
+}
+
+.site-data .length-num {
+  color: #2d1f14 !important;
+  font-weight: 700;
+}
+.site-data a:hover {
+  color: #8c3a2b !important;
+}
+/* === 侧边栏统计数字（5/16/2）进一步加深 === */
+.site-data-align .headline {
+  color: #2d1f14 !important;
+  font-weight: 600;
+}
+
+/* === Follow Me 按钮文字加深 === */
+#aside-content .card-info a[href*='github'] {
+  color: #3d2b1a !important;
+  border-color: rgba(180, 130, 80, 0.3) !important;
+}
+#aside-content .card-info a[href*='github']:hover {
+  color: #fff !important;
+  background: linear-gradient(135deg, #d4a574, #b8764e) !important;
+  border-color: #b8764e !important;
+}
+
+/* === 文章元信息（发表于/更新于/分类/标签）加深 === */
+.recent-post-info .article-meta-wrap,
+.recent-post-info .article-meta-wrap a,
+.recent-post-info .post-meta-date,
+.recent-post-info .post-meta-categories a,
+.recent-post-info .article-meta__separator {
+  color: #6b5744 !important;
+}
+
+.recent-post-info .article-meta-wrap a:hover {
+  color: #8c3a2b !important;
+}
+
+/* === 文章摘要文字 === */
+.recent-post-info .content {
+  color: #4a3828 !important;
+}
+
+/* === 最新文章小部件日期加深 === */
+#aside-content .aside-list .aside-list-item .content time,
+#aside-content .aside-list-item .content time {
+  color: #8a7460 !important;
+}
+
+/* === 侧边栏社交图标 === */
+#aside-content .card-info .card-info-social-icons a {
+  color: #5a4332 !important;
+  transition: color 0.3s;
+}
+#aside-content .card-info .card-info-social-icons a:hover {
+  color: #b8764e !important;
 }
 
 /* === 链接样式 === */
 a:not(.btn):not(.site-page):not(.tag):not([class*='social']) {
-  color: #38bdf8;
+  color: #9c6540;
   transition: color 0.3s, text-shadow 0.3s;
 }
 
 a:not(.btn):not(.site-page):not(.tag):not([class*='social']):hover {
-  color: #00e5ff;
-  text-shadow: 0 0 8px rgba(0, 229, 255, 0.3);
+  color: #b8764e;
+  text-shadow: 0 0 8px rgba(184, 118, 78, 0.25);
 }
 
 /* === 代码块 === */
 figure.highlight,
 pre {
-  background: #0f172a !important;
-  border: 1px solid rgba(0, 229, 255, 0.08) !important;
+  background: #faf5ef !important;
+  border: 1px solid rgba(180, 130, 80, 0.12) !important;
   border-radius: 8px;
 }
 
 code {
-  color: #00e5ff;
-  background: rgba(0, 229, 255, 0.08);
+  color: #8c5a3a;
+  background: rgba(212, 165, 116, 0.12);
   border-radius: 4px;
   padding: 2px 6px;
 }
@@ -176,121 +295,150 @@ code {
 }
 
 ::-webkit-scrollbar-track {
-  background: #0a0e17;
+  background: #f5ebe0;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #00e5ff 0%, #7c3aed 100%);
+  background: #c4a882;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, #38bdf8 0%, #8b5cf6 100%);
+  background: #b8956a;
 }
 
 /* === 页脚 === */
 #footer {
-  background: rgba(10, 14, 23, 0.95) !important;
-  border-top: 1px solid rgba(0, 229, 255, 0.08);
+  background: rgba(255, 255, 255, 0.9) !important;
+  border-top: 1px solid rgba(180, 130, 80, 0.12);
+}
+
+#footer,
+#footer .footer-other,
+#footer .footer-copyright,
+#footer .footer_custom_text {
+  color: #5a4332 !important;
+}
+
+#footer a {
+  color: #9c6540 !important;
+  transition: color 0.3s;
+}
+#footer a:hover {
+  color: #b8764e !important;
 }
 
 /* === TOC 目录 === */
 .toc-link.active {
-  color: #00e5ff !important;
+  color: #b8764e !important;
 }
 
 .toc-link:hover {
-  color: #38bdf8 !important;
+  color: #9c6540 !important;
 }
 
 /* === 分页器 === */
 #pagination .page-number.current {
-  background: linear-gradient(135deg, #00e5ff 0%, #7c3aed 100%) !important;
+  background: linear-gradient(135deg, #d4a574 0%, #b8764e 100%) !important;
   color: #fff !important;
   border: none !important;
 }
 
 #pagination .page-number {
-  color: #94a3b8 !important;
-  border: 1px solid rgba(0, 229, 255, 0.15) !important;
+  color: #6b5744 !important;
+  border: 1px solid rgba(180, 130, 80, 0.2) !important;
   transition: all 0.3s ease;
 }
 
 #pagination .page-number:hover {
-  border-color: #00e5ff !important;
-  color: #00e5ff !important;
+  border-color: #b8764e !important;
+  color: #b8764e !important;
 }
 
 /* === 右侧按钮组 === */
 #rightside > div > button,
 #rightside > div > a {
-  background: rgba(15, 23, 42, 0.9) !important;
-  border: 1px solid rgba(0, 229, 255, 0.1) !important;
-  color: #94a3b8 !important;
+  background: rgba(255, 255, 255, 0.9) !important;
+  border: 1px solid rgba(180, 130, 80, 0.15) !important;
+  color: #6b5744 !important;
   transition: all 0.3s ease;
 }
 
 #rightside > div > button:hover,
 #rightside > div > a:hover {
-  border-color: #00e5ff !important;
-  color: #00e5ff !important;
-  box-shadow: 0 0 12px rgba(0, 229, 255, 0.2);
+  border-color: #b8764e !important;
+  color: #b8764e !important;
+  box-shadow: 0 2px 10px rgba(184, 118, 78, 0.15);
 }
 
 /* === 引用块 === */
 blockquote {
-  background: rgba(124, 58, 237, 0.06) !important;
-  border-left: 4px solid #7c3aed !important;
-  color: #cbd5e1;
+  background: rgba(212, 165, 116, 0.08) !important;
+  border-left: 4px solid #c4956a !important;
+  color: #3d2b1a;
 }
 
 /* === 选中文本 === */
 ::selection {
-  background: rgba(124, 58, 237, 0.4);
-  color: #f8fafc;
+  background: rgba(212, 165, 116, 0.35);
+  color: #2d1f14;
 }
 
 /* === 搜索弹窗 === */
 .search-dialog {
-  background: rgba(15, 23, 42, 0.95) !important;
-  border: 1px solid rgba(0, 229, 255, 0.1) !important;
+  background: rgba(255, 255, 255, 0.95) !important;
+  border: 1px solid rgba(180, 130, 80, 0.15) !important;
   backdrop-filter: blur(20px);
 }
 
 .search-dialog input {
-  background: rgba(30, 41, 59, 0.8) !important;
-  border: 1px solid rgba(0, 229, 255, 0.15) !important;
-  color: #e2e8f0 !important;
+  background: rgba(250, 246, 240, 0.8) !important;
+  border: 1px solid rgba(180, 130, 80, 0.2) !important;
+  color: #2d1f14 !important;
 }
 
 .search-dialog input:focus {
-  border-color: #00e5ff !important;
-  box-shadow: 0 0 12px rgba(0, 229, 255, 0.15);
+  border-color: #b8764e !important;
+  box-shadow: 0 0 12px rgba(184, 118, 78, 0.12);
 }
 
 /* === 美化: 文章标题前缀图标 === */
 .beautify h2::before {
-  color: #00e5ff !important;
+  color: #b8764e !important;
 }
 
 /* === 移动端侧边栏 === */
 #sidebar_mobile_data {
-  background: rgba(10, 14, 23, 0.98) !important;
+  background: rgba(255, 255, 255, 0.96) !important;
 }
 
 /* === 文章版权信息 === */
 .post-copyright {
-  background: rgba(15, 23, 42, 0.6) !important;
-  border-left: 4px solid #00e5ff !important;
+  background: rgba(250, 246, 240, 0.7) !important;
+  border-left: 4px solid #d4a574 !important;
 }
 
 /* === 相关推荐 === */
 .relatedPosts .relatedPosts-list > .relatedPosts-item {
-  border: 1px solid rgba(0, 229, 255, 0.06);
+  border: 1px solid rgba(180, 130, 80, 0.1);
   transition: all 0.3s ease;
 }
 
 .relatedPosts .relatedPosts-list > .relatedPosts-item:hover {
-  border-color: rgba(0, 229, 255, 0.2);
+  border-color: rgba(184, 118, 78, 0.25);
   transform: translateY(-2px);
+}
+
+/* === 侧边栏精简：隐藏不需要的卡片 === */
+#aside-content .card-announcement,
+#aside-content .card-categories,
+#aside-content .card-tags,
+#aside-content .card-archives,
+#aside-content .card-webinfo {
+  display: none !important;
+}
+
+/* === 隐藏暗色模式切换按钮（博客仅用浅色主题） === */
+#darkmode {
+  display: none !important;
 }
