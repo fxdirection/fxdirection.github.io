@@ -1,6 +1,22 @@
 (function () {
   "use strict";
 
+  function patchHostLayout() {
+    if (!window.location.pathname.includes("/opencode-deploy-from-video")) {
+      return;
+    }
+    document.body.classList.add("opencode-standalone-page");
+    var aside = document.getElementById("aside-content");
+    if (aside) {
+      aside.style.display = "none";
+    }
+    var post = document.getElementById("post");
+    if (post) {
+      post.style.width = "100%";
+      post.style.maxWidth = "100%";
+    }
+  }
+
   function initProgressBar() {
     var bar = document.getElementById("progress-bar");
     if (!bar) return;
@@ -121,6 +137,7 @@
   }
 
   document.addEventListener("DOMContentLoaded", function () {
+    patchHostLayout();
     initProgressBar();
     initActiveLink();
     initSearch();

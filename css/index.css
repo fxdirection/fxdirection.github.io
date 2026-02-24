@@ -1645,8 +1645,8 @@ canvas:not(#ribbon-canvas),
   --global-font-size: 14px;
   --global-bg: #fff;
   --font-color: #4c4948;
-  --hr-border: #738db8;
-  --hr-before-color: #49638f;
+  --hr-border: #f2eae2;
+  --hr-before-color: #ede2d6;
   --search-bg: #f6f8fa;
   --search-input-color: #4c4948;
   --search-a-color: #4c4948;
@@ -1658,7 +1658,7 @@ canvas:not(#ribbon-canvas),
   --tab-button-hover-bg: #dcdcdc;
   --tab-button-active-bg: #fff;
   --card-bg: #fff;
-  --card-meta: #64748b;
+  --card-meta: #6b7280;
   --sidebar-bg: #f6f8fa;
   --sidebar-menu-bg: #fff;
   --btn-hover-color: #8c3a2b;
@@ -1677,7 +1677,7 @@ canvas:not(#ribbon-canvas),
   --card-hover-box-shadow: 0 3px 8px 6px rgba(7,17,27,0.09);
   --pseudo-hover: #8c3a2b;
   --headline-presudo: #a0a0a0;
-  --scrollbar-color: #d4a574;
+  --scrollbar-color: #c4956a;
   --default-bg-color: #d4a574;
   --zoom-bg: #fff;
   --mark-bg: rgba(0,0,0,0.3);
@@ -2054,8 +2054,8 @@ figure.highlight pre .javascript .function {
 }
 .container code {
   padding: 2px 5px;
-  background: #1e293b;
-  color: #e2e8f0;
+  background: #f5ebe0;
+  color: #4a3728;
 }
 .container pre {
   padding: 10px 20px;
@@ -3784,7 +3784,7 @@ figure.highlight pre .javascript .function {
   color: #d4a574;
 }
 #aside-content #card-toc .toc-content .toc-link.active {
-  background: #c4956a;
+  background: #8c5a3a;
   color: #fff;
 }
 #aside-content .sticky_layout:only-child > :first-child {
@@ -4944,7 +4944,7 @@ figure.highlight pre .javascript .function {
   overflow-wrap: break-word;
 }
 .container a {
-  color: #c4956a;
+  color: #8c5a3a;
 }
 .container a:hover {
   text-decoration: underline;
@@ -7301,7 +7301,7 @@ blockquote.pullquote.right {
   box-shadow: none;
 }
 [data-theme='dark'] .container .note code {
-  background: #1e293b;
+  background: #f5ebe0;
 }
 [data-theme='dark'] .container .aplayer {
   filter: brightness(0.8);
