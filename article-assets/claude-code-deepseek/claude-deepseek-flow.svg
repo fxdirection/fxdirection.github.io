@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="520" viewBox="0 0 1200 520" role="img" aria-labelledby="title desc">
+  <title id="title">Claude Code, ccSwitch and DeepSeek connection flow</title>
+  <desc id="desc">A clean diagram showing Claude Code connected to ccSwitch, then to DeepSeek API, then to V4 Pro and V4 Flash models.</desc>
+  <rect width="1200" height="520" fill="#f7f8fb"/>
+  <rect x="56" y="48" width="1088" height="424" rx="28" fill="#ffffff" stroke="#dde3ee" stroke-width="2"/>
+  <text x="96" y="104" font-family="Segoe UI, Arial, sans-serif" font-size="34" font-weight="700" fill="#172033">Claude Code 配置 DeepSeek</text>
+  <text x="96" y="142" font-family="Segoe UI, Arial, sans-serif" font-size="18" fill="#5d6b82">通过 ccSwitch 统一管理 provider，把 Claude Code 工作流接到 DeepSeek V4 模型</text>
+
+  <g font-family="Segoe UI, Arial, sans-serif">
+    <rect x="96" y="218" width="210" height="120" rx="18" fill="#f5efe7" stroke="#d9c8b3" stroke-width="2"/>
+    <text x="201" y="268" text-anchor="middle" font-size="24" font-weight="700" fill="#402d1f">Claude Code</text>
+    <text x="201" y="302" text-anchor="middle" font-size="15" fill="#725b47">终端里的编码助手</text>
+
+    <path d="M326 278 H444" stroke="#8ba0bb" stroke-width="4" stroke-linecap="round"/>
+    <path d="M432 263 L454 278 L432 293" fill="none" stroke="#8ba0bb" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <rect x="474" y="218" width="210" height="120" rx="18" fill="#eef6ff" stroke="#bdd7f0" stroke-width="2"/>
+    <text x="579" y="268" text-anchor="middle" font-size="24" font-weight="700" fill="#173b65">ccSwitch</text>
+    <text x="579" y="302" text-anchor="middle" font-size="15" fill="#416989">Provider 配置中心</text>
+
+    <path d="M704 278 H822" stroke="#8ba0bb" stroke-width="4" stroke-linecap="round"/>
+    <path d="M810 263 L832 278 L810 293" fill="none" stroke="#8ba0bb" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <rect x="852" y="188" width="252" height="180" rx="18" fill="#eefaf3" stroke="#b9e2c7" stroke-width="2"/>
+    <text x="978" y="238" text-anchor="middle" font-size="24" font-weight="700" fill="#174d2c">DeepSeek API</text>
+    <text x="978" y="270" text-anchor="middle" font-size="15" fill="#3e7653">Anthropic Format</text>
+    <rect x="896" y="296" width="164" height="34" rx="17" fill="#ffffff" stroke="#c9e8d3"/>
+    <text x="978" y="318" text-anchor="middle" font-size="14" fill="#24603b">deepseek-v4-pro</text>
+    <rect x="896" y="338" width="164" height="34" rx="17" fill="#ffffff" stroke="#c9e8d3"/>
+    <text x="978" y="360" text-anchor="middle" font-size="14" fill="#24603b">deepseek-v4-flash</text>
+  </g>
+
+  <rect x="96" y="394" width="1008" height="38" rx="19" fill="#f0f3f8"/>
+  <text x="600" y="419" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="16" fill="#59677c">核心链路：Claude Code → ccSwitch → https://api.deepseek.com/anthropic → V4 Pro / V4 Flash</text>
+</svg>

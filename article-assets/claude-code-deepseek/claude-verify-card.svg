@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="520" viewBox="0 0 1200 520" role="img" aria-labelledby="title desc">
+  <title id="title">Claude Code verification commands</title>
+  <desc id="desc">A clean terminal card showing claude, context and model verification commands.</desc>
+  <rect width="1200" height="520" fill="#f5f7fb"/>
+  <rect x="94" y="70" width="1012" height="380" rx="18" fill="#11151c"/>
+  <circle cx="132" cy="108" r="8" fill="#ef6b64"/>
+  <circle cx="160" cy="108" r="8" fill="#f4c15d"/>
+  <circle cx="188" cy="108" r="8" fill="#65c97a"/>
+  <text x="226" y="115" font-family="Segoe UI, Arial, sans-serif" font-size="16" fill="#aab4c3">PowerShell - Claude Code</text>
+
+  <g font-family="Consolas, 'Courier New', monospace" font-size="22">
+    <text x="132" y="174" fill="#8be28b">PS&gt;</text>
+    <text x="190" y="174" fill="#e8eef8">cd D:\your-project</text>
+    <text x="132" y="226" fill="#8be28b">PS&gt;</text>
+    <text x="190" y="226" fill="#e8eef8">claude</text>
+    <text x="132" y="292" fill="#f0cf75">Claude&gt;</text>
+    <text x="240" y="292" fill="#e8eef8">/context</text>
+    <text x="132" y="344" fill="#f0cf75">Claude&gt;</text>
+    <text x="240" y="344" fill="#e8eef8">/model</text>
+    <text x="132" y="396" fill="#8bd3ff">model:</text>
+    <text x="220" y="396" fill="#e8eef8">deepseek-v4-pro</text>
+  </g>
+</svg>
